@@ -13,6 +13,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;900&family=Bree+Serif&family=Bangers&family=Pacifico&family=Anton&family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="feedback.css">
+<link rel="stylesheet" href="countries.css">
+<script src="countries.js" defer></script>
 <style>
   :root {
     --bg: #0d0d10;
@@ -474,6 +476,24 @@
   </section>
 </main>
 
+<section id="download-countries" aria-labelledby="countries-heading">
+  <div class="wrap center">
+    <span class="eyebrow" data-i18n="countries.eyebrow">A comunidade Corte</span>
+    <h2 id="countries-heading" data-i18n="countries.title">Downloads por país</h2>
+    <p class="lead" data-i18n="countries.lead">De onde vem quem descarrega o Corte? Descobre os países da nossa comunidade.</p>
+    <div class="country-panel" style="text-align:left"><div id="country-list" role="status" aria-live="polite">A carregar países…</div></div>
+    <p class="feedback-note" data-i18n="countries.note">Cliques em descarregar com país indicado pela pessoa, desde a ativação desta função. Não representa pessoas únicas nem confirma transferências concluídas.</p>
+  </div>
+</section>
+<dialog id="country-dialog" aria-labelledby="country-title" aria-describedby="country-info">
+  <form id="country-form">
+    <h2 id="country-title" data-i18n="countries.dialog">De onde nos visitas?</h2>
+    <p id="country-info" data-i18n="countries.info">Ajuda-nos a conhecer a comunidade. Guardamos apenas uma contagem por país, sem nome ou localização exata. Este passo é opcional.</p>
+    <label for="download-country" data-i18n="countries.label">O teu país</label>
+    <select id="download-country" required></select>
+    <div class="country-actions"><button class="btn" type="submit" data-i18n="countries.continue">Continuar e descarregar</button><a id="country-skip" href="https://github.com/chibangar/corte-site/releases/latest/download/Corte-Setup.exe" data-i18n="countries.skip">Saltar e descarregar</a></div>
+  </form>
+</dialog>
 <section id="feedback" aria-labelledby="feedback-heading">
   <div class="wrap">
     <span class="eyebrow">A tua opinião conta</span>
@@ -544,6 +564,10 @@
 
   // ---------- translations ----------
   const EN = {
+    "countries.eyebrow":"The Corte community", "countries.title":"Downloads by country", "countries.lead":"Where do people download Corte from? Discover the countries in our community.",
+    "countries.note":"Download clicks with a self-reported country, counted since this feature was enabled. These are not unique people or confirmed completed downloads.",
+    "countries.dialog":"Where are you visiting from?", "countries.info":"Help us get to know the community. We only store a total per country, without your name or precise location. This step is optional.",
+    "countries.label":"Your country", "countries.continue":"Continue and download", "countries.skip":"Skip and download",
     "nav.demo": "Demo", "nav.features": "Features", "nav.styles": "Captions", "nav.install": "Install", "nav.download": "Download",
     "hero.badge": "Free for Windows",
     "hero.title": "Edit videos with captions that dance",
