@@ -1,0 +1,1 @@
+window.CORTE_FEEDBACK = { url: 'https://crqswztdsimxdppunfba.supabase.co', key: 'sb_publishable_l43KGNV9ikxSIDzjpXIO7g_hbN2GR2c' };
