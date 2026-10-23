@@ -26,7 +26,9 @@
   async function request(path, options = {}) {
     const response = await fetch(config.url + '/rest/v1/' + path, {...options, headers: {apikey:config.key,'Content-Type':'application/json',...options.headers},signal:AbortSignal.timeout(15000)});
     if (!response.ok) throw new Error('Feedback request failed');
-    return response.status === 204 ? null : response.json();
+    // A successful insert answers 201 with an empty body (Prefer: return=minimal).
+    const text = await response.text();
+    return text ? JSON.parse(text) : null;
   }
   async function load() {
     if (loading) return;
