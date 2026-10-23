@@ -15,6 +15,8 @@
 <link rel="stylesheet" href="feedback.css">
 <link rel="stylesheet" href="countries.css?v=2">
 <script src="countries.js?v=2" defer></script>
+<link rel="stylesheet" href="feedback-notice.css">
+<script src="feedback-notice.js" defer></script>
 <style>
   :root {
     --bg: #0d0d10;
@@ -511,6 +513,13 @@
 </section>
 <script src="feedback-config.js"></script>
 <script src="feedback.js"></script>
+<aside id="feedback-notice" aria-labelledby="feedback-notice-title">
+  <button type="button" id="feedback-notice-close" aria-label="Fechar aviso de feedback">×</button>
+  <span class="eyebrow" data-i18n="feedback.notice.badge">Ajuda a melhorar o Corte</span>
+  <h2 id="feedback-notice-title" data-i18n="feedback.notice.title">Encontraste um bug? Tens uma ideia?</h2>
+  <p data-i18n="feedback.notice.text">Conta-nos na aba Feedback. Podes reportar problemas, pedir novas funções e partilhar ideias para a app.</p>
+  <a class="btn" href="#feedback" id="feedback-notice-link" data-i18n="feedback.notice.action">Dar feedback</a>
+</aside>
 <footer>
   <div class="wrap">
     <span data-i18n="foot.copy">© 2026 Corte. Todos os direitos reservados.</span>
@@ -555,6 +564,8 @@
 
   // ---------- translations ----------
   const EN = {
+    "feedback.notice.badge":"Help improve Corte", "feedback.notice.title":"Found a bug? Have an idea?",
+    "feedback.notice.text":"Tell us in the Feedback tab. Report problems, request features and share ideas for the app.", "feedback.notice.action":"Give feedback",
     "countries.eyebrow":"The Corte community", "countries.title":"Downloads by country", "countries.lead":"Where do people download Corte from? Discover the countries in our community.",
     "countries.note":"Approximate country automatically detected from the IP through Cloudflare when downloading. We store only country totals. VPNs can affect results; these are not confirmed completed downloads.",
     "countries.dialog":"Where are you visiting from?", "countries.info":"Help us get to know the community. We only store a total per country, without your name or precise location. This step is optional.",
