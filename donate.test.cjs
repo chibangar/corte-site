@@ -1,0 +1,3 @@
+const {test}=require('node:test');const assert=require('node:assert/strict');const fs=require('node:fs');
+test('donate section stays hidden until a PayPal link is configured',()=>{const html=fs.readFileSync('index.html','utf8');assert.match(html,/<section id="apoiar"[^>]*hidden/);assert.match(html,/donate-config\.js/);assert.match(html,/donate\.js/);const js=fs.readFileSync('donate.js','utf8');assert.match(js,/paypal\\\.me/);assert.match(js,/if \(!valid\) return/);});
+test('donate link opens PayPal safely in a new tab',()=>{const html=fs.readFileSync('index.html','utf8');assert.match(html,/class="donate-btn donate-link"[^>]*rel="noopener"/);});
