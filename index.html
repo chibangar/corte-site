@@ -13,7 +13,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;900&family=Bree+Serif&family=Bangers&family=Pacifico&family=Anton&family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="feedback.css">
-<link rel="stylesheet" href="donate.css">
 <link rel="stylesheet" href="countries.css?v=3">
 <script src="countries.js?v=3" defer></script>
 <link rel="stylesheet" href="feedback-notice.css">
@@ -284,7 +283,6 @@
       <a class="link" href="#legendas" data-i18n="nav.styles">Legendas</a>
       <a class="link" href="#instalar" data-i18n="nav.install">Instalar</a>
       <a class="link feedback-link" href="#feedback">Feedback</a>
-      <a class="link donate-nav" href="#apoiar" data-i18n="nav.donate" hidden>Apoiar ❤</a>
       <div class="lang" role="group" aria-label="Idioma / Language">
         <button type="button" data-lang="pt" aria-pressed="true">PT</button>
         <button type="button" data-lang="en" aria-pressed="false">EN</button>
@@ -570,27 +568,6 @@
 </section>
 <script src="feedback-config.js"></script>
 <script src="feedback.js?v=2"></script>
-<section id="apoiar" aria-labelledby="donate-heading" hidden>
-  <div class="wrap reveal">
-    <div class="donate-card">
-      <span class="donate-heart"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.2 4.3 2.4.7-1.2 2.2-2.4 4.3-2.4 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></svg></span>
-      <h2 id="donate-heading" data-i18n="donate.title">O Corte é grátis. Ajuda-o a crescer.</h2>
-      <p data-i18n="donate.lead">Se o Corte te poupa tempo, podes contribuir com o valor que quiseres. As doações ajudam a pagar o desenvolvimento, as novas funções e os testes.</p>
-      <ul class="donate-perks">
-        <li data-i18n="donate.p1">💡 Mais funções</li>
-        <li data-i18n="donate.p2">🐞 Correções mais rápidas</li>
-        <li data-i18n="donate.p3">🎬 Sempre grátis e sem marca de água</li>
-      </ul>
-      <a class="donate-btn donate-link" href="#" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.2 4.3 2.4.7-1.2 2.2-2.4 4.3-2.4 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></svg>
-        <span data-i18n="donate.cta">Doar com PayPal</span>
-      </a>
-      <p class="donate-note" data-i18n="donate.note">Doar é opcional: o Corte continua grátis para todos. O pagamento é feito no site do PayPal; o Corte não vê nem guarda os teus dados de pagamento.</p>
-    </div>
-  </div>
-</section>
-<script src="donate-config.js"></script>
-<script src="donate.js"></script>
 <aside id="feedback-notice" aria-labelledby="feedback-notice-title">
   <button type="button" id="feedback-notice-close" aria-label="Fechar aviso de feedback">×</button>
   <span class="eyebrow" data-i18n="feedback.notice.badge">Ajuda a melhorar o Corte</span>
@@ -666,12 +643,6 @@
     "countries.dialog":"Where are you visiting from?", "countries.info":"Help us get to know the community. We only store a total per country, without your name or precise location. This step is optional.",
     "countries.label":"Your country", "countries.continue":"Continue and download", "countries.skip":"Skip and download",
     "nav.demo": "Demo", "nav.features": "Features", "nav.styles": "Captions", "nav.install": "Install", "nav.download": "Download",
-    "nav.donate": "Support ❤",
-    "donate.title": "Corte is free. Help it grow.",
-    "donate.lead": "If Corte saves you time, you can contribute any amount you like. Donations help pay for development, new features and testing.",
-    "donate.p1": "💡 More features", "donate.p2": "🐞 Faster fixes", "donate.p3": "🎬 Always free, no watermark",
-    "donate.cta": "Donate with PayPal",
-    "donate.note": "Donating is optional: Corte stays free for everyone. Payment happens on PayPal's site; Corte never sees or stores your payment details.",
     "hero.badge": "Free for Windows",
     "hero.title": "Edit videos with captions that dance",
     "hero.text": "Corte is a video editor that writes captions and song lyrics for you, synced word by word, with animated effects and ready-made text templates.",
