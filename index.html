@@ -114,6 +114,9 @@
   .country-shortcut { display: inline-flex; align-items: center; margin: 12px 0 0 12px; padding: 9px 16px; border: 1px solid var(--line); border-radius: 999px; color: var(--accent); font-size: 14px; font-weight: 700; text-decoration: none; }
   .country-shortcut:hover { border-color: var(--accent); background: rgba(44, 200, 216, .08); }
   .country-shortcut:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+  .installer-check { margin-top: 16px; max-width: 560px; padding: 12px 16px; border: 1px solid var(--line); border-radius: 14px; background: rgba(44, 200, 216, .04); font-size: 13px; color: var(--dim); }
+  .installer-check strong { display: block; color: var(--text); margin-bottom: 4px; }
+  .installer-check a { display: inline-block; margin-top: 8px; font-weight: 700; }
 
   .device { position: relative; transform: perspective(1200px) rotateY(-10deg) rotateX(4deg); transition: transform .6s; animation: bob 7s ease-in-out infinite; }
   .device:hover { transform: perspective(1200px) rotateY(0) rotateX(0); }
@@ -312,6 +315,11 @@
         </div>
         <div class="downloads" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg><b class="dl-total">0</b> <span data-i18n="dl.people">pessoas já descarregaram</span></div>
         <a class="country-shortcut" href="#download-countries" data-i18n="countries.shortcut">Ver países →</a>
+        <div class="installer-check" role="note">
+          <strong data-i18n="security.title">Tens dúvidas sobre a segurança do ficheiro?</strong>
+          <span data-i18n="security.text">Antes de abrir o instalador, podes enviar o Corte-Setup.exe para análise no VirusTotal e consultar os resultados.</span>
+          <a href="https://www.virustotal.com/gui/home/upload" target="_blank" rel="noopener noreferrer" data-i18n="security.link">Analisar no VirusTotal ↗</a>
+        </div>
       </div>
       <div class="device">
         <div class="glow"></div>
@@ -568,6 +576,7 @@
 
   // ---------- translations ----------
   const EN = {
+    "security.title":"Questions about the file's safety?", "security.text":"Before opening the installer, you can upload Corte-Setup.exe to VirusTotal for analysis and review the results.", "security.link":"Scan with VirusTotal ↗",
     "countries.shortcut":"View countries →",
     "feedback.notice.badge":"Help improve Corte", "feedback.notice.title":"Found a bug? Have an idea?",
     "feedback.notice.text":"Tell us in the Feedback tab. Report problems, request features and share ideas for the app.", "feedback.notice.action":"Give feedback",
