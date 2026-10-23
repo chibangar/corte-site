@@ -13,8 +13,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;900&family=Bree+Serif&family=Bangers&family=Pacifico&family=Anton&family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="feedback.css">
-<link rel="stylesheet" href="countries.css?v=2">
-<script src="countries.js?v=2" defer></script>
+<link rel="stylesheet" href="countries.css?v=3">
+<script src="countries.js?v=3" defer></script>
 <link rel="stylesheet" href="feedback-notice.css">
 <link rel="stylesheet" href="news.css?v=017">
 <script src="feedback-notice.js" defer></script>
@@ -316,7 +316,7 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>
           <span data-i18n="beta.text">O Corte ainda não está totalmente pronto: é uma versão beta e algumas funções podem ter erros ou mudar. Guarda cópias dos teus vídeos importantes.</span>
         </div>
-        <div class="downloads" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg><b class="dl-total">0</b> <span data-i18n="dl.people">pessoas já descarregaram</span></div>
+        <div class="downloads" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg><b class="dl-total">0</b> <span data-i18n="dl.people">downloads do instalador</span></div>
         <a class="country-shortcut" href="#download-countries" data-i18n="countries.shortcut">Ver países →</a>
         <a class="country-shortcut" href="#novidades" data-i18n="news.shortcut">Ver novidades →</a>
         <div class="installer-check" role="note">
@@ -535,10 +535,11 @@
 <section id="download-countries" aria-labelledby="countries-heading">
   <div class="wrap center">
     <span class="eyebrow" data-i18n="countries.eyebrow">A comunidade Corte</span>
-    <h2 id="countries-heading" data-i18n="countries.title">Downloads por país</h2>
-    <p class="lead" data-i18n="countries.lead">De onde vem quem descarrega o Corte? Descobre os países da nossa comunidade.</p>
+    <h2 id="countries-heading" data-i18n="countries.title">Países registados no site</h2>
+    <p class="lead" data-i18n="countries.lead">Esta lista mostra cliques no botão de download do site. O total do GitHub inclui também links diretos, atualizações e downloads repetidos; não representa pessoas únicas.</p>
+    <p id="country-summary" class="feedback-note" role="status">A carregar contagens…</p>
     <div class="country-panel" style="text-align:left"><div id="country-list" role="status" aria-live="polite">A carregar países…</div></div>
-    <p class="feedback-note" data-i18n="countries.note">País aproximado detetado automaticamente pelo IP através da Cloudflare ao descarregar. Guardamos apenas contagens por país. VPNs podem alterar o resultado; não confirma transferências concluídas.</p>
+    <p class="feedback-note" data-i18n="countries.note">As duas contagens medem coisas diferentes e não têm de coincidir. O GitHub não fornece os países de downloads antigos, links diretos ou atualizações pela app. O país dos cliques no site é aproximado pelo IP através da Cloudflare; bloqueadores, VPNs e falhas de rede podem afetar o registo. Guardamos apenas totais por país, sem confirmar a conclusão do download.</p>
   </div>
 </section>
 <section id="feedback" aria-labelledby="feedback-heading">
@@ -602,6 +603,8 @@
         document.querySelectorAll(".rel-info").forEach(el => { el.textContent = latest.tag_name + size; });
       }
       const total = published.reduce((n, rel) => n + (setup(rel) ? setup(rel).download_count : 0), 0);
+      window.CORTE_DOWNLOAD_TOTAL=total;
+      window.dispatchEvent(new CustomEvent('corte-download-total',{detail:total}));
       document.querySelector(".dl-total").textContent = total.toLocaleString(lang === "en" ? "en" : "pt-PT");
       const label = document.querySelector(".downloads [data-i18n]");
       label.dataset.i18n = total === 1 ? "dl.person" : "dl.people";
@@ -635,8 +638,8 @@
     "countries.shortcut":"View countries →",
     "feedback.notice.badge":"Help improve Corte", "feedback.notice.title":"Found a bug? Have an idea?",
     "feedback.notice.text":"Tell us in the Feedback tab. Report problems, request features and share ideas for the app.", "feedback.notice.action":"Give feedback",
-    "countries.eyebrow":"The Corte community", "countries.title":"Downloads by country", "countries.lead":"Where do people download Corte from? Discover the countries in our community.",
-    "countries.note":"Approximate country automatically detected from the IP through Cloudflare when downloading. We store only country totals. VPNs can affect results; these are not confirmed completed downloads.",
+    "countries.eyebrow":"The Corte community", "countries.title":"Countries recorded on the website", "countries.lead":"This list shows clicks on the website download button. GitHub totals also include direct links, updates and repeated downloads; they are not unique people.",
+    "countries.note":"The two counts measure different things and do not have to match. GitHub does not provide countries for past downloads, direct links or in-app updates. Website click countries are approximated through Cloudflare using the IP; blockers, VPNs and network failures can affect recording. We store only country totals, without confirming download completion.",
     "countries.dialog":"Where are you visiting from?", "countries.info":"Help us get to know the community. We only store a total per country, without your name or precise location. This step is optional.",
     "countries.label":"Your country", "countries.continue":"Continue and download", "countries.skip":"Skip and download",
     "nav.demo": "Demo", "nav.features": "Features", "nav.styles": "Captions", "nav.install": "Install", "nav.download": "Download",
@@ -663,7 +666,7 @@
     "beta.tag": "Beta version",
     "beta.text": "Corte is not fully finished yet: this is a beta and some features may have bugs or change. Keep copies of your important videos.",
     "beta.short": "beta version, still in development",
-    "dl.people": "people have downloaded it", "dl.person": "person has downloaded it", "st.dl": "downloads",
+    "dl.people": "installer downloads", "dl.person": "installer download", "st.dl": "downloads",
     "st.tpl": "text templates", "st.fx": "animated effects", "st.tr": "transitions and filters", "st.res": "maximum resolution",
     "inst.eyebrow": "Install", "inst.title": "Ready in under a minute",
     "s1.t": "Download", "s1.d": "Click \"Download for Windows\" and open Corte-Setup.exe.",
@@ -827,7 +830,8 @@
     document.getElementById("sound-wave").setAttribute("d", video.muted ? "M23 9l-6 6M17 9l6 6" : "M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14");
   }
   PT["demo.mute"] = "Desligar som";
-  PT["dl.person"] = "pessoa já descarregou";
+  PT["dl.people"] = "downloads do instalador";
+  PT["dl.person"] = "download do instalador";
   soundBtn.addEventListener("click", () => {
     video.muted = !video.muted;
     if (video.paused) video.play().catch(() => {});
