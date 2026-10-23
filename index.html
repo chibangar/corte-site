@@ -99,6 +99,10 @@
   .btn.ghost::after { display: none; }
   .btn.ghost:hover { border-color: var(--accent); }
   .meta { margin-top: 14px; color: var(--dim); font-size: 13px; }
+  .downloads { margin-top: 16px; display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 999px; background: rgba(255, 210, 74, .08); border: 1px solid rgba(255, 210, 74, .3); color: var(--text); font-size: 14px; animation: pop .5s ease-out; }
+  .downloads svg { width: 16px; height: 16px; color: var(--gold); }
+  .downloads b { color: var(--gold); font-size: 16px; }
+  .downloads span { white-space: nowrap; }
 
   .device { position: relative; transform: perspective(1200px) rotateY(-10deg) rotateX(4deg); transition: transform .6s; animation: bob 7s ease-in-out infinite; }
   .device:hover { transform: perspective(1200px) rotateY(0) rotateX(0); }
@@ -289,6 +293,7 @@
           <a class="btn ghost" href="#demo" data-i18n="hero.watch">Ver demo ▶</a>
         </div>
         <div class="meta"><span data-i18n="hero.meta">Windows 10 e 11 (64 bits)</span> · <span class="rel-info">v0.1.0 · 5 MB</span></div>
+        <div class="downloads" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg><b class="dl-total">0</b> <span data-i18n="dl.people">pessoas já descarregaram</span></div>
       </div>
       <div class="device">
         <div class="glow"></div>
@@ -400,6 +405,7 @@
         </div>
       </div>
       <div class="stats" style="margin-top:28px">
+        <div class="stat reveal"><div class="n" id="dl-stat" data-count="0">0</div><div class="l" data-i18n="st.dl">downloads</div></div>
         <div class="stat reveal"><div class="n" data-count="84">0</div><div class="l" data-i18n="st.tpl">modelos de texto</div></div>
         <div class="stat reveal"><div class="n" data-count="34">0</div><div class="l" data-i18n="st.fx">efeitos animados</div></div>
         <div class="stat reveal"><div class="n" data-count="16">0</div><div class="l" data-i18n="st.tr">transições e filtros</div></div>
@@ -471,14 +477,30 @@
   const REPO = "chibangar/corte-site";
   const DL = "https://github.com/" + REPO + "/releases/latest/download/Corte-Setup.exe";
   document.querySelectorAll(".dl").forEach(a => { a.href = DL; });
-  // Latest version and size, straight from GitHub (falls back to the text in the page).
-  fetch("https://api.github.com/repos/" + REPO + "/releases/latest")
+  // Latest version, size and total downloads (every release), straight from
+  // GitHub; the page keeps its own text if the request fails.
+  fetch("https://api.github.com/repos/" + REPO + "/releases?per_page=100")
     .then(r => r.ok ? r.json() : null)
-    .then(rel => {
-      if (!rel) return;
-      const asset = (rel.assets || []).find(a => a.name === "Corte-Setup.exe");
-      const size = asset ? " · " + (asset.size / 1048576).toFixed(1).replace(".", ",") + " MB" : "";
-      document.querySelectorAll(".rel-info").forEach(el => { el.textContent = rel.tag_name + size; });
+    .then(releases => {
+      if (!Array.isArray(releases)) return;
+      const published = releases.filter(r => !r.draft && !r.prerelease);
+      const setup = rel => (rel.assets || []).find(a => a.name === "Corte-Setup.exe");
+      const latest = published[0];
+      if (latest) {
+        const asset = setup(latest);
+        const size = asset ? " · " + (asset.size / 1048576).toFixed(1).replace(".", ",") + " MB" : "";
+        document.querySelectorAll(".rel-info").forEach(el => { el.textContent = latest.tag_name + size; });
+      }
+      const total = published.reduce((n, rel) => n + (setup(rel) ? setup(rel).download_count : 0), 0);
+      document.querySelector(".dl-total").textContent = total.toLocaleString(lang === "en" ? "en" : "pt-PT");
+      const label = document.querySelector(".downloads [data-i18n]");
+      label.dataset.i18n = total === 1 ? "dl.person" : "dl.people";
+      label.textContent = (lang === "en" ? EN : PT)[label.dataset.i18n];
+      document.querySelector(".downloads").hidden = false;
+      const stat = document.getElementById("dl-stat");
+      stat.dataset.count = total;
+      // If the stats are already on screen, count up now; otherwise the reveal does it.
+      if (stat.closest(".reveal.in")) countUp(stat);
     })
     .catch(() => {});
 
@@ -507,6 +529,7 @@
     "styles.neon": "Tonight", "styles.glitch": "Non stop", "styles.comic": "Wow so cool", "styles.grad": "Gradient",
     "tl.eyebrow": "Timeline", "tl.title": "Cut, join and sync",
     "tl.lead": "Text, effect, video and audio tracks with waveforms. Drag, split and see the result instantly.",
+    "dl.people": "people have downloaded it", "dl.person": "person has downloaded it", "st.dl": "downloads",
     "st.tpl": "text templates", "st.fx": "animated effects", "st.tr": "transitions and filters", "st.res": "maximum resolution",
     "inst.eyebrow": "Install", "inst.title": "Ready in under a minute",
     "s1.t": "Download", "s1.d": "Click \"Download for Windows\" and open Corte-Setup.exe.",
@@ -670,6 +693,7 @@
     document.getElementById("sound-wave").setAttribute("d", video.muted ? "M23 9l-6 6M17 9l6 6" : "M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14");
   }
   PT["demo.mute"] = "Desligar som";
+  PT["dl.person"] = "pessoa já descarregou";
   soundBtn.addEventListener("click", () => {
     video.muted = !video.muted;
     if (video.paused) video.play().catch(() => {});
