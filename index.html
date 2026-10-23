@@ -12,6 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;900&family=Bree+Serif&family=Bangers&family=Pacifico&family=Anton&family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="feedback.css">
 <style>
   :root {
     --bg: #0d0d10;
@@ -269,6 +270,7 @@
       <a class="link" href="#funcoes" data-i18n="nav.features">Funções</a>
       <a class="link" href="#legendas" data-i18n="nav.styles">Legendas</a>
       <a class="link" href="#instalar" data-i18n="nav.install">Instalar</a>
+      <a class="link feedback-link" href="#feedback">Feedback</a>
       <div class="lang" role="group" aria-label="Idioma / Language">
         <button type="button" data-lang="pt" aria-pressed="true">PT</button>
         <button type="button" data-lang="en" aria-pressed="false">EN</button>
@@ -472,6 +474,32 @@
   </section>
 </main>
 
+<section id="feedback" aria-labelledby="feedback-heading">
+  <div class="wrap">
+    <span class="eyebrow">A tua opinião conta</span>
+    <h2 id="feedback-heading">Vamos melhorar o Corte juntos.</h2>
+    <p class="lead">Encontraste um bug? Falta uma função? Partilha a tua ideia e vê o que a comunidade está a sugerir.</p>
+    <div class="feedback-layout">
+      <form id="feedback-form" class="feedback-panel">
+        <label>Tipo de feedback<select name="kind"><option value="bug">Reportar bug</option><option value="feature">Pedir funcionalidade</option><option value="idea">Partilhar ideia</option></select></label>
+        <label>Título<input name="title" required minlength="4" maxlength="120"></label>
+        <label>Descrição<textarea name="description" required minlength="10" maxlength="3000" aria-describedby="feedback-help"></textarea></label>
+        <p id="feedback-help" class="feedback-note">Num bug, indica o que aconteceu, os passos para repetir e a versão do Corte.</p>
+        <label>Nome (opcional)<input name="author" maxlength="60" autocomplete="nickname"></label>
+        <p class="feedback-note">O teu nome e a mensagem ficam visíveis para todos. Não incluas dados pessoais ou palavras-passe.</p>
+        <button type="submit" class="btn">Publicar feedback</button>
+        <p id="feedback-status" role="status" aria-live="polite"></p>
+      </form>
+      <div class="feedback-panel">
+        <div class="feedback-toolbar"><label for="feedback-filter" class="feedback-note">Mostrar</label><select id="feedback-filter"><option value="">Tudo</option><option value="bug">Bugs</option><option value="feature">Funcionalidades</option><option value="idea">Ideias</option></select><button id="feedback-refresh" class="feedback-refresh" type="button">Atualizar</button></div>
+        <p class="feedback-note">Os 100 envios mais recentes da comunidade.</p>
+        <div id="feedback-list" aria-live="polite">A carregar feedback…</div>
+      </div>
+    </div>
+  </div>
+</section>
+<script src="feedback-config.js"></script>
+<script src="feedback.js"></script>
 <footer>
   <div class="wrap">
     <span data-i18n="foot.copy">© 2026 Corte. Todos os direitos reservados.</span>
