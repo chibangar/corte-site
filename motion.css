@@ -1,0 +1,7 @@
+/* Extra animation layer driven by motion.js (GSAP). Without GSAP, or with
+   reduced motion, none of these classes are added and the page stays as is. */
+.scroll-progress { position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 1000; pointer-events: none; transform-origin: 0 50%; transform: scaleX(0); background: linear-gradient(90deg, var(--accent), var(--accent-2), #ff4fa3); box-shadow: 0 0 12px rgba(44, 200, 216, .6); }
+
+/* Section titles are revealed by a "cut" line sweeping across them. */
+h2.cut { position: relative; clip-path: inset(-.3em calc(100% - var(--cut, 100) * 1% - 6px) -.3em -.2em); }
+h2.cut::after { content: ""; position: absolute; top: -.05em; bottom: -.05em; left: calc(var(--cut, 100) * 1%); width: 3px; border-radius: 3px; background: var(--accent); box-shadow: 0 0 14px var(--accent), 0 0 30px rgba(44, 200, 216, .5); }
