@@ -31,3 +31,13 @@
 .news-keys .keys-track b{position:absolute;top:-10px;bottom:-10px;left:8%;width:2px;background:#fff;box-shadow:0 0 10px rgba(255,255,255,.8);animation:keys-head 4s linear infinite}
 @keyframes keys-head{0%{left:8%}100%{left:92%}}
 @keyframes keys-move{0%{transform:translate(0,0) scale(.8) rotate(0);opacity:.35}50%{transform:translate(110px,-14px) scale(1.25) rotate(-8deg);opacity:1}100%{transform:translate(220px,6px) scale(.95) rotate(0);opacity:.85}}
+/* Automatic updates card: a download ring fills, then a check appears. */
+.news-auto{display:grid;place-items:center;background:radial-gradient(120% 100% at 50% 0%,rgba(44,200,216,.14),transparent 60%),var(--bg-2)}
+.news-auto .auto-ring{width:86px;height:86px;border-radius:50%;display:grid;place-items:center;border:4px solid rgba(44,200,216,.25);border-top-color:var(--accent);animation:auto-spin 1.6s linear infinite}
+.news-auto .auto-ring span{font:900 30px Montserrat,sans-serif;color:var(--accent);animation:auto-spin 1.6s linear infinite reverse}
+.news-auto .auto-bar{position:absolute;left:18%;right:18%;bottom:46px;height:8px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden}
+.news-auto .auto-bar i{position:absolute;inset:0 auto 0 0;width:0;background:linear-gradient(90deg,#3fe0ee,var(--accent));animation:auto-fill 3.2s ease-in-out infinite}
+.news-auto .auto-pill{position:absolute;right:16%;bottom:62px;padding:4px 10px;border-radius:99px;background:rgba(44,200,216,.15);color:var(--accent);font:700 12px Montserrat,sans-serif;opacity:0;animation:auto-pill 3.2s ease-in-out infinite}
+@keyframes auto-spin{to{transform:rotate(360deg)}}
+@keyframes auto-fill{0%{width:0}70%,100%{width:100%}}
+@keyframes auto-pill{0%,65%{opacity:0;transform:translateY(6px)}75%,100%{opacity:1;transform:none}}
