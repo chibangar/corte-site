@@ -4,340 +4,265 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Corte — editor de vídeo</title>
-<meta name="description" content="Corte: editor de vídeo grátis para Windows com legendas e letras automáticas, karaoke, efeitos animados e exportação rápida.">
+<meta name="description" content="Corte: editor de vídeo grátis para Windows com legendas automáticas, transições, stickers, efeitos sonoros sem direitos de autor e agentes de IA.">
 <meta property="og:title" content="Corte — editor de vídeo">
-<meta property="og:description" content="Legendas e letras automáticas, karaoke, efeitos animados. Grátis para Windows.">
+<meta property="og:description" content="Legendas automáticas, transições, stickers, sons de cinema e agentes de IA. Grátis para Windows.">
 <meta property="og:image" content="https://chibangar.github.io/corte-site/img/editor.png">
+<meta name="theme-color" content="#050506">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23121214'/%3E%3Cpath d='M10 8 L24 16 L10 24 Z' fill='none' stroke='white' stroke-width='2.6' stroke-linejoin='round'/%3E%3Cpath d='M7 25 L25 7' stroke='%232cc8d8' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;900&family=Bree+Serif&family=Bangers&family=Pacifico&family=Anton&family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css?v=1">
+<link rel="stylesheet" href="news.css?v=020">
 <link rel="stylesheet" href="feedback.css">
 <link rel="stylesheet" href="countries.css?v=3">
-<script src="countries.js?v=3" defer></script>
 <link rel="stylesheet" href="feedback-notice.css">
-<link rel="stylesheet" href="news.css?v=019">
+<script src="countries.js?v=3" defer></script>
 <script src="feedback-notice.js" defer></script>
-<link rel="stylesheet" href="motion.css?v=1">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
-<script src="motion.js?v=2" defer></script>
-<style>
-  :root {
-    --bg: #0d0d10;
-    --bg-2: #121214;
-    --panel: #1a1a1e;
-    --panel-2: #26262b;
-    --line: #2e2e34;
-    --text: #ededf0;
-    --dim: #9d9da6;
-    --accent: #2cc8d8;
-    --accent-2: #8b5cf6;
-    --gold: #ffd24a;
-    --pink: #ff4fa3;
-    --radius: 18px;
-  }
-  * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--text);
-    font-family: Montserrat, "Segoe UI", system-ui, sans-serif;
-    line-height: 1.55;
-    overflow-x: hidden;
-  }
-  a { color: var(--accent); }
-  img, video { max-width: 100%; }
-  .wrap { max-width: 1160px; margin: 0 auto; padding: 0 16px; }
-
-  /* ---------- header ---------- */
-  header {
-    position: fixed; inset: 0 0 auto 0; z-index: 20;
-    transition: background .3s, border-color .3s;
-    border-bottom: 1px solid transparent;
-  }
-  header.scrolled { background: rgba(13, 13, 16, .82); backdrop-filter: blur(12px); border-color: var(--line); }
-  .bar { display: flex; align-items: center; justify-content: space-between; height: 66px; gap: 12px; }
-  .logo { display: flex; align-items: center; gap: 10px; font-weight: 900; font-size: 21px; color: var(--text); text-decoration: none; }
-  .logo svg { width: 30px; height: 30px; }
-  .logo .cut { stroke-dasharray: 30; stroke-dashoffset: 30; animation: draw 1.2s .3s ease-out forwards; }
-  @keyframes draw { to { stroke-dashoffset: 0; } }
-  .bar nav { display: flex; align-items: center; gap: 22px; }
-  .bar nav a.link { color: var(--dim); text-decoration: none; font-weight: 500; font-size: 14px; transition: color .2s; }
-  .bar nav a.link:hover { color: var(--text); }
-  .lang { display: flex; background: var(--panel); border: 1px solid var(--line); border-radius: 999px; padding: 3px; }
-  .lang button { border: 0; background: transparent; color: var(--dim); font: inherit; font-size: 13px; font-weight: 700; padding: 6px 12px; border-radius: 999px; cursor: pointer; transition: background .25s, color .25s; }
-  .lang button[aria-pressed="true"] { background: var(--accent); color: #041316; }
-  .mini-dl { display: none; text-decoration: none; background: var(--accent); color: #041316; font-weight: 900; font-size: 14px; padding: 9px 16px; border-radius: 999px; }
-  header.scrolled .mini-dl { display: inline-block; animation: pop .35s ease-out; }
-  @keyframes pop { from { transform: scale(.7); opacity: 0; } }
-
-  /* ---------- hero ---------- */
-  .hero { position: relative; min-height: 100vh; display: flex; align-items: center; padding: 110px 0 60px; overflow: hidden; }
-  #sparks { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
-  /* Soft light blobs: radial gradients (cheap to animate, unlike a blur filter). */
-  .blob { position: absolute; border-radius: 50%; opacity: .5; pointer-events: none; animation: float 18s ease-in-out infinite; will-change: transform; }
-  .blob.b1 { width: 760px; height: 760px; background: radial-gradient(closest-side, rgba(44, 200, 216, .55), transparent); top: -300px; left: -280px; }
-  .blob.b2 { width: 700px; height: 700px; background: radial-gradient(closest-side, rgba(139, 92, 246, .55), transparent); bottom: -320px; right: -260px; animation-delay: -6s; }
-  .blob.b3 { width: 480px; height: 480px; background: radial-gradient(closest-side, rgba(255, 79, 163, .4), transparent); top: 35%; left: 50%; animation-delay: -12s; }
-  @keyframes float { 0%, 100% { transform: translate(0, 0) scale(1); } 33% { transform: translate(60px, 40px) scale(1.08); } 66% { transform: translate(-40px, 70px) scale(.95); } }
-  .hero-grid { position: relative; display: grid; grid-template-columns: 1.05fr 1fr; gap: 48px; align-items: center; }
-  .badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(44, 200, 216, .1); border: 1px solid rgba(44, 200, 216, .35); color: var(--accent); padding: 6px 14px; border-radius: 999px; font-size: 13px; font-weight: 700; }
-  .badge .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 0 rgba(44, 200, 216, .7); animation: ping 1.8s infinite; }
-  @keyframes ping { 70% { box-shadow: 0 0 0 10px rgba(44, 200, 216, 0); } 100% { box-shadow: 0 0 0 0 rgba(44, 200, 216, 0); } }
-  .hero h1 { font-size: clamp(38px, 6.2vw, 70px); line-height: 1.04; margin: 20px 0 20px; font-weight: 900; letter-spacing: -1px; }
-  .hero h1 .w { display: inline-block; transition: color .25s, transform .25s, text-shadow .25s; }
-  .hero h1 .w.lit { color: var(--gold); transform: translateY(-3px) scale(1.04); text-shadow: 0 0 24px rgba(255, 210, 74, .45); }
-  .hero h1 .w.sung { color: var(--gold); }
-  .hero p.sub { color: var(--dim); font-size: clamp(16px, 2vw, 19px); max-width: 560px; margin: 0 0 32px; }
-  .cta { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
-  .btn {
-    position: relative; overflow: hidden;
-    display: inline-flex; align-items: center; gap: 10px;
-    background: linear-gradient(135deg, #3fe0ee, var(--accent) 45%, #1aa9ba);
-    color: #041316; text-decoration: none; font-weight: 900; font-size: 18px;
-    padding: 17px 30px; border-radius: 999px;
-    box-shadow: 0 12px 34px rgba(44, 200, 216, .35);
-    transition: transform .2s, box-shadow .2s;
-  }
-  .btn:hover { transform: translateY(-2px); box-shadow: 0 18px 44px rgba(44, 200, 216, .5); }
-  .btn::after { content: ""; position: absolute; top: 0; left: -60%; width: 40%; height: 100%; background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .55), transparent); transform: skewX(-20deg); animation: shine 3.2s infinite; }
-  @keyframes shine { 0%, 60% { left: -60%; } 100% { left: 130%; } }
-  .btn svg { width: 22px; height: 22px; }
-  .btn.ghost { background: transparent; color: var(--text); border: 1px solid var(--line); box-shadow: none; }
-  .btn.ghost::after { display: none; }
-  .btn.ghost:hover { border-color: var(--accent); }
-  .meta { margin-top: 14px; color: var(--dim); font-size: 13px; }
-  .badge.beta { margin-left: 6px; background: rgba(255, 170, 40, .1); border-color: rgba(255, 170, 40, .45); color: #ffb648; }
-  .warn { margin-top: 16px; max-width: 560px; display: flex; gap: 10px; align-items: flex-start; text-align: left; padding: 12px 16px; border-radius: 14px; background: rgba(255, 170, 40, .08); border: 1px solid rgba(255, 170, 40, .35); color: #ffd9a0; font-size: 14px; line-height: 1.45; }
-  .warn svg { flex: none; width: 20px; height: 20px; color: #ffb648; margin-top: 1px; }
-  .downloads { margin-top: 16px; display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 999px; background: rgba(255, 210, 74, .08); border: 1px solid rgba(255, 210, 74, .3); color: var(--text); font-size: 14px; animation: pop .5s ease-out; }
-  .downloads svg { width: 16px; height: 16px; color: var(--gold); }
-  .downloads b { color: var(--gold); font-size: 16px; }
-  .downloads span { white-space: nowrap; }
-  .country-shortcut { display: inline-flex; align-items: center; margin: 12px 0 0 12px; padding: 9px 16px; border: 1px solid var(--line); border-radius: 999px; color: var(--accent); font-size: 14px; font-weight: 700; text-decoration: none; }
-  .country-shortcut:hover { border-color: var(--accent); background: rgba(44, 200, 216, .08); }
-  .country-shortcut:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
-  .installer-check { margin-top: 16px; max-width: 560px; padding: 12px 16px; border: 1px solid var(--line); border-radius: 14px; background: rgba(44, 200, 216, .04); font-size: 13px; color: var(--dim); }
-  .installer-check strong { display: block; color: var(--text); margin-bottom: 4px; }
-  .installer-check a { display: inline-block; margin-top: 8px; font-weight: 700; }
-
-  .device { position: relative; transform: perspective(1200px) rotateY(-10deg) rotateX(4deg); transition: transform .6s; animation: bob 7s ease-in-out infinite; }
-  .device:hover { transform: perspective(1200px) rotateY(0) rotateX(0); }
-  @keyframes bob { 50% { translate: 0 -12px; } }
-  .device .frame { border-radius: 16px; overflow: hidden; border: 1px solid var(--line); background: #000; box-shadow: 0 40px 90px rgba(0, 0, 0, .6), 0 0 0 1px rgba(255, 255, 255, .04) inset; }
-  .device .frame img { display: block; width: 100%; height: auto; }
-  .device .glow { position: absolute; inset: -30px; z-index: -1; background: radial-gradient(closest-side, rgba(44, 200, 216, .35), transparent); filter: blur(30px); }
-  .scroll-hint { position: absolute; left: 50%; bottom: 22px; translate: -50% 0; width: 26px; height: 42px; border: 2px solid var(--line); border-radius: 14px; }
-  .scroll-hint::after { content: ""; position: absolute; left: 50%; top: 8px; width: 4px; height: 8px; margin-left: -2px; border-radius: 2px; background: var(--accent); animation: wheel 1.6s infinite; }
-  @keyframes wheel { to { transform: translateY(14px); opacity: 0; } }
-
-  /* ---------- sections ---------- */
-  section { position: relative; padding: 96px 0; }
-  .eyebrow { color: var(--accent); font-weight: 700; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; }
-  h2 { font-size: clamp(28px, 4.2vw, 46px); line-height: 1.1; margin: 10px 0 14px; font-weight: 900; letter-spacing: -.5px; }
-  .lead { color: var(--dim); margin: 0 0 40px; max-width: 640px; font-size: 17px; }
-  .center { text-align: center; }
-  .center .lead { margin-left: auto; margin-right: auto; }
-
-  .reveal { opacity: 0; transform: translateY(36px); transition: opacity .8s ease, transform .8s cubic-bezier(.2, .7, .2, 1); }
-  .reveal.in { opacity: 1; transform: none; }
-
-  /* demo video */
-  .player { position: relative; max-width: 980px; margin: 0 auto; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); background: #000; box-shadow: 0 30px 80px rgba(0, 0, 0, .55); }
-  .player .top { display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: var(--panel); border-bottom: 1px solid var(--line); font-size: 13px; color: var(--dim); }
-  .player .top i { width: 11px; height: 11px; border-radius: 50%; display: inline-block; }
-  .player video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; background: #000; }
-  .sound { position: absolute; right: 16px; bottom: 16px; display: flex; align-items: center; gap: 8px; background: rgba(0, 0, 0, .6); backdrop-filter: blur(6px); color: #fff; border: 1px solid rgba(255, 255, 255, .2); border-radius: 999px; padding: 9px 16px; font: inherit; font-weight: 700; font-size: 14px; cursor: pointer; }
-  .sound svg { width: 18px; height: 18px; }
-
-  /* features */
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px; }
-  .card { position: relative; background: linear-gradient(180deg, var(--panel), var(--bg-2)); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; overflow: hidden; transition: transform .35s, border-color .35s; }
-  .card::before { content: ""; position: absolute; inset: 0; background: radial-gradient(400px circle at var(--mx, 50%) var(--my, 0%), rgba(44, 200, 216, .14), transparent 45%); opacity: 0; transition: opacity .35s; }
-  .card:hover { transform: translateY(-6px); border-color: rgba(44, 200, 216, .5); }
-  .card:hover::before { opacity: 1; }
-  .card h3 { position: relative; margin: 16px 0 8px; font-size: 18px; }
-  .card p { position: relative; margin: 0; color: var(--dim); font-size: 15px; }
-  .ico { position: relative; width: 48px; height: 48px; border-radius: 14px; display: grid; place-items: center; color: var(--accent); background: rgba(44, 200, 216, .12); }
-  .ico svg { width: 26px; height: 26px; }
-  .card:hover .ico svg { animation: wiggle .6s; }
-  @keyframes wiggle { 30% { transform: rotate(-12deg) scale(1.1); } 60% { transform: rotate(8deg); } }
-
-  /* caption styles live demo */
-  .styles { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
-  .style { position: relative; height: 190px; border-radius: var(--radius); border: 1px solid var(--line); overflow: hidden; display: grid; place-items: center;
-    background: radial-gradient(120% 90% at 50% 110%, #2a1f3a 0%, #121216 60%); }
-  .style .name { position: absolute; left: 14px; bottom: 12px; font-size: 12px; font-weight: 700; color: var(--dim); background: rgba(0, 0, 0, .45); padding: 4px 10px; border-radius: 999px; }
-  .style .stage { font-size: 34px; text-align: center; line-height: 1.1; padding: 0 12px; }
-  .s-karaoke .stage { font-family: Montserrat; font-weight: 900; color: #fff; -webkit-text-stroke: 1px #000; text-shadow: 0 3px 0 rgba(0, 0, 0, .5); }
-  .s-karaoke .stage .k { transition: color .15s, transform .15s; display: inline-block; }
-  .s-karaoke .stage .k.on { color: var(--gold); transform: scale(1.12); }
-  .s-box .stage { font-family: Montserrat; font-weight: 900; color: #fff; text-transform: uppercase; }
-  .s-box .stage .k { display: inline-block; padding: 2px 8px; border-radius: 10px; transition: background .15s, transform .15s; }
-  .s-box .stage .k.on { background: #8b5cf6; transform: scale(1.08); }
-  .s-legend .stage { font-family: "Bree Serif", serif; color: #fff; font-size: 38px; text-align: left; text-shadow: 0 0 14px rgba(255, 255, 255, .55), 0 2px 0 #19191e; }
-  .s-legend .stage span { display: block; opacity: 0; filter: blur(8px); transform: scale(1.15); transition: opacity .35s, filter .35s, transform .35s; }
-  .s-legend .stage span.on { opacity: 1; filter: blur(0); transform: none; }
-  .s-legend .stage span:nth-child(2) { margin-left: 18px; font-size: 1.25em; }
-  .s-legend .stage span.c { color: var(--gold); }
-  .s-neon .stage { font-family: Pacifico, cursive; font-size: 40px; color: #ffe1f0; text-shadow: 0 0 6px #ff4fa3, 0 0 18px #ff4fa3, 0 0 40px #ff4fa3; animation: flicker 3s infinite; }
-  @keyframes flicker { 0%, 18%, 22%, 25%, 53%, 57%, 100% { opacity: 1; } 20%, 24%, 55% { opacity: .35; } }
-  .s-glitch .stage { position: relative; font-family: Anton, Impact, sans-serif; font-size: 46px; color: #fff; text-transform: uppercase; letter-spacing: 1px; }
-  .s-glitch .stage::before, .s-glitch .stage::after { content: attr(data-text); position: absolute; inset: 0; }
-  .s-glitch .stage::before { color: #ff2a5f; animation: glitch 1.6s infinite steps(2); clip-path: inset(0 0 55% 0); }
-  .s-glitch .stage::after { color: #2cf6ff; animation: glitch 1.3s infinite reverse steps(2); clip-path: inset(50% 0 0 0); }
-  @keyframes glitch { 0% { transform: translate(0); } 20% { transform: translate(-4px, 2px); } 40% { transform: translate(3px, -2px); } 60% { transform: translate(-2px, 1px); } 80% { transform: translate(4px, 0); } 100% { transform: translate(0); } }
-  .s-type .stage { font-family: "Roboto Mono", monospace; font-size: 26px; color: #f5ebd7; }
-  .s-type .stage::after { content: "▌"; color: var(--accent); animation: blink 1s steps(1) infinite; margin-left: 2px; }
-  @keyframes blink { 50% { opacity: 0; } }
-  .s-comic .stage { font-family: Bangers, cursive; font-size: 48px; color: var(--gold); -webkit-text-stroke: 2px #1b1b1b; text-shadow: 4px 4px 0 #e0306b; letter-spacing: 1px; }
-  .s-comic .stage .k { display: inline-block; animation: bounce 1.4s infinite; }
-  .s-comic .stage .k:nth-child(2) { animation-delay: .12s; }
-  .s-comic .stage .k:nth-child(3) { animation-delay: .24s; }
-  @keyframes bounce { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-14px) rotate(-3deg); } }
-  .s-grad .stage { font-family: Montserrat; font-weight: 900; font-size: 40px; background: linear-gradient(90deg, #c5a3ff, #7de2ff, #ff9ad5, #c5a3ff); background-size: 300% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: slide 4s linear infinite; }
-  @keyframes slide { to { background-position: 300% 0; } }
-
-  /* timeline mock */
-  .tl { max-width: 980px; margin: 0 auto; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 18px 22px; overflow: hidden; }
-  .tl .ruler { display: flex; justify-content: space-between; color: var(--dim); font: 500 11px "Roboto Mono", monospace; padding: 0 0 10px 64px; }
-  .tl .rows { position: relative; display: grid; gap: 8px; }
-  .tl .row { display: grid; grid-template-columns: 56px 1fr; gap: 8px; align-items: center; }
-  .tl .row b { font-size: 11px; color: var(--dim); font-weight: 700; }
-  .tl .lane { position: relative; height: 34px; border-radius: 8px; background: #141417; }
-  .tl .clip { position: absolute; top: 3px; bottom: 3px; border-radius: 6px; }
-  .tl .cap { background: #c4813a; }
-  .tl .fx { background: #6b3fb5; }
-  .tl .vid { background: repeating-linear-gradient(90deg, #345 0 28px, #2b3a4a 28px 30px); }
-  .tl .aud { background: #2d7a52; overflow: hidden; }
-  .tl .aud::after { content: ""; position: absolute; inset: 6px 4px; background: repeating-linear-gradient(90deg, rgba(200, 255, 220, .7) 0 2px, transparent 2px 5px); mask: linear-gradient(transparent, #000 30%, #000 70%, transparent); animation: wave 1.2s linear infinite; }
-  @keyframes wave { to { background-position: 20px 0; } }
-  .tl .head { position: absolute; top: -6px; bottom: -6px; left: 64px; width: 2px; background: #fff; box-shadow: 0 0 12px rgba(255, 255, 255, .8); animation: play 9s linear infinite; }
-  .tl .head::before { content: ""; position: absolute; top: -4px; left: -6px; width: 14px; height: 10px; border-radius: 3px; background: #fff; }
-  @keyframes play { from { left: 64px; } to { left: 100%; } }
-
-  /* stats */
-  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; }
-  .stat { text-align: center; padding: 26px 10px; border-radius: var(--radius); background: var(--panel); border: 1px solid var(--line); }
-  .stat .n { font-size: clamp(34px, 5vw, 50px); font-weight: 900; background: linear-gradient(135deg, #fff, var(--accent)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-  .stat .l { color: var(--dim); font-size: 14px; }
-
-  /* gallery */
-  .marquee { overflow: hidden; mask: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
-  .marquee .track { display: flex; gap: 18px; width: max-content; animation: scrollx 40s linear infinite; }
-  .marquee:hover .track { animation-play-state: paused; }
-  .marquee img { height: 260px; width: auto; border-radius: 14px; border: 1px solid var(--line); }
-  @keyframes scrollx { to { transform: translateX(calc(-50% - 9px)); } }
-
-  /* install */
-  ol.steps { counter-reset: s; list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; }
-  ol.steps li { counter-increment: s; position: relative; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 62px 20px 22px; }
-  ol.steps li::before { content: counter(s); position: absolute; left: 20px; top: 18px; width: 32px; height: 32px; border-radius: 50%; background: var(--accent); color: #041316; font-weight: 900; display: grid; place-items: center; }
-  ol.steps b { display: block; margin-bottom: 6px; }
-  ol.steps span { color: var(--dim); font-size: 14.5px; }
-  .note { margin-top: 18px; background: rgba(44, 200, 216, .07); border: 1px solid rgba(44, 200, 216, .3); border-radius: var(--radius); padding: 14px 18px; font-size: 14.5px; }
-
-  /* final CTA */
-  .final { text-align: center; padding: 110px 0; overflow: hidden; }
-  .final .ring { position: absolute; left: 50%; top: 50%; width: 700px; height: 700px; translate: -50% -50%; border-radius: 50%; border: 1px solid rgba(44, 200, 216, .2); animation: pulse 4s ease-out infinite; pointer-events: none; }
-  .final .ring:nth-child(2) { animation-delay: 1.3s; }
-  .final .ring:nth-child(3) { animation-delay: 2.6s; }
-  @keyframes pulse { from { transform: scale(.3); opacity: 1; } to { transform: scale(1.2); opacity: 0; } }
-  .final h2 { position: relative; }
-  .final .cta { justify-content: center; position: relative; }
-
-  footer { border-top: 1px solid var(--line); padding: 28px 0 40px; color: var(--dim); font-size: 13px; }
-  footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; }
-
-  @media (max-width: 900px) {
-    .hero-grid { grid-template-columns: 1fr; text-align: center; }
-    .hero p.sub, .warn { margin-left: auto; margin-right: auto; }
-    .cta { justify-content: center; }
-    .device { transform: none; margin-top: 10px; }
-    .scroll-hint { display: none; }
-  }
-  @media (max-width: 640px) {
-    .bar nav a.link { display: none; }
-    header.scrolled .mini-dl { display: none; }
-    section { padding: 72px 0; }
-    .btn { font-size: 16px; padding: 15px 24px; }
-    .marquee img { height: 170px; }
-    .style .stage { font-size: 28px; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { animation: none !important; transition: none !important; }
-    .reveal { opacity: 1; transform: none; }
-    .s-legend .stage span { opacity: 1; filter: none; transform: none; }
-  }
-</style>
+<script src="site.js?v=1" defer></script>
 </head>
 <body>
+<a class="skip" href="#instalar" data-i18n="nav.skip">Ir para o download</a>
 <header id="top">
   <div class="wrap bar">
+    <nav aria-label="Secções">
+      <a href="#legendas" data-i18n="nav.captions">Legendas</a>
+      <a href="#som" data-i18n="nav.sound">Som</a>
+      <a href="#stickers">Stickers</a>
+      <a href="#ia" data-i18n="nav.ai">IA</a>
+      <a href="#novidades" data-i18n="nav.news">Novidades</a>
+      <a href="#feedback">Feedback</a>
+    </nav>
     <a class="logo" href="#">
-      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M9 6 L26 16 L9 26 Z" fill="none" stroke="#fff" stroke-width="3" stroke-linejoin="round"/><path class="cut" d="M6 26 L26 6" stroke="#2cc8d8" stroke-width="2.6" stroke-linecap="round"/></svg>
+      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M9 6 L26 16 L9 26 Z" fill="none" stroke="#fff" stroke-width="3" stroke-linejoin="round"/><path d="M6 26 L26 6" stroke="#2cc8d8" stroke-width="2.6" stroke-linecap="round"/></svg>
       Corte
     </a>
-    <nav>
-      <a class="link" href="#demo" data-i18n="nav.demo">Demo</a>
-      <a class="link" href="#novidades" data-i18n="nav.news">Novidades</a>
-      <a class="link" href="#funcoes" data-i18n="nav.features">Funções</a>
-      <a class="link" href="#legendas" data-i18n="nav.styles">Legendas</a>
-      <a class="link" href="#instalar" data-i18n="nav.install">Instalar</a>
-      <a class="link feedback-link" href="#feedback">Feedback</a>
+    <div class="bar-end">
       <div class="lang" role="group" aria-label="Idioma / Language">
         <button type="button" data-lang="pt" aria-pressed="true">PT</button>
         <button type="button" data-lang="en" aria-pressed="false">EN</button>
       </div>
-      <a class="mini-dl dl" href="#" data-i18n="nav.download">Descarregar</a>
-    </nav>
+      <a class="pill dl" href="https://github.com/chibangar/corte-site/releases/latest/download/Corte-Setup.exe" data-i18n="nav.download">Descarregar</a>
+    </div>
   </div>
 </header>
 
 <main>
-  <!-- HERO -->
-  <div class="hero">
-    <canvas id="sparks" aria-hidden="true"></canvas>
-    <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
-    <div class="wrap hero-grid">
-      <div>
-        <span class="badge"><span class="dot"></span><span data-i18n="hero.badge">Grátis para Windows</span></span>
-        <span class="badge beta" data-i18n="beta.tag">Versão beta</span>
-        <h1 id="karaoke" data-i18n-words="hero.title">Edita vídeos com legendas que dançam</h1>
-        <p class="sub" data-i18n="hero.text">O Corte é um editor de vídeo que cria legendas e letras de músicas sozinho, sincronizadas palavra a palavra, com efeitos animados e modelos de texto prontos.</p>
+  <!-- 1. The editor appears out of the dark, CORTE lit behind it. -->
+  <section class="chapter" id="hero" data-glow="255,90,31" data-pill="#ff5a1f">
+    <div class="stage">
+      <div class="ambient"></div>
+      <p class="giant" aria-hidden="true">CORTE</p>
+      <div class="floor"></div>
+      <div class="device"><img src="img/editor.png" alt="O editor do Corte: biblioteca, pré-visualização com legendas e linha do tempo" width="1600" height="900" fetchpriority="high"></div>
+      <div class="copy bl">
+        <h1 class="fx" data-i18n="hero.title">Feito para cortar tudo.</h1>
+        <p data-i18n="hero.text">Editor de vídeo grátis para Windows: legendas automáticas, transições, stickers, sons de cinema e agentes de IA. Sem marcas de água, sem conta.</p>
         <div class="cta">
-          <a class="btn dl" href="#">
+          <a class="btn dl" href="https://github.com/chibangar/corte-site/releases/latest/download/Corte-Setup.exe">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>
-            <span data-i18n="hero.download">Descarregar para Windows</span>
+            <span data-i18n="hero.download">Descarregar grátis</span>
           </a>
-          <a class="btn ghost" href="#demo" data-i18n="hero.watch">Ver demo ▶</a>
-        </div>
-        <div class="meta"><span data-i18n="hero.meta">Windows 10 e 11 (64 bits)</span> · <span class="rel-info">v0.1.15 · 8,0 MB</span></div>
-        <div class="update-callout" role="note"><strong data-i18n="update.available">Já disponível: Corte 0.1.15 com atualizações pela app.</strong><span data-i18n="update.migrate">Se tens a 0.1.0 original, instala esta versão uma vez. Depois, o Corte avisa quando houver novas versões e permite atualizar sem voltar ao site.</span><a class="dl" href="https://github.com/chibangar/corte-site/releases/latest/download/Corte-Setup.exe" data-i18n="update.action">Instalar a versão com atualizador →</a></div>
-        <div class="warn" role="note">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>
-          <span data-i18n="beta.text">O Corte ainda não está totalmente pronto: é uma versão beta e algumas funções podem ter erros ou mudar. Guarda cópias dos teus vídeos importantes.</span>
-        </div>
-        <div class="downloads" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg><b class="dl-total">0</b> <span data-i18n="dl.people">downloads do instalador</span></div>
-        <a class="country-shortcut" href="#download-countries" data-i18n="countries.shortcut">Ver países →</a>
-        <a class="country-shortcut" href="#novidades" data-i18n="news.shortcut">Ver novidades →</a>
-        <div class="installer-check" role="note">
-          <strong data-i18n="security.title">Tens dúvidas sobre a segurança do ficheiro?</strong>
-          <span data-i18n="security.text">Antes de abrir o instalador, podes enviar o Corte-Setup.exe para análise no VirusTotal e consultar os resultados.</span>
-          <a href="https://www.virustotal.com/gui/home/upload" target="_blank" rel="noopener noreferrer" data-i18n="security.link">Analisar no VirusTotal ↗</a>
+          <a class="btn ghost" href="#novidades" data-i18n="hero.news">Ver novidades →</a>
         </div>
       </div>
-      <div class="device">
-        <div class="glow"></div>
-        <div class="frame"><img src="img/editor.png" alt="" width="1600" height="900"></div>
+      <div class="meta">
+        <div><b>Windows 10 · 11</b> · <span data-i18n="hero.free">grátis</span></div>
+        <div><span class="rel-info">v0.1.19 · 8,0 MB</span> <span class="beta-tag" data-i18n="beta.tag">Versão beta</span></div>
       </div>
     </div>
-    <div class="scroll-hint" aria-hidden="true"></div>
-  </div>
+  </section>
 
-  <!-- DEMO -->
+  <!-- 2. Captions: the real lyric video made in Corte, with a counter. -->
+  <section class="chapter" id="legendas" data-glow="255,180,60" data-pill="#ffc83c">
+    <div class="stage">
+      <div class="ambient" style="--ay:55%"></div>
+      <div class="floor"></div>
+      <div class="device"><video id="demo-video" src="media/demo.mp4" poster="media/demo-poster.jpg" muted loop playsinline preload="metadata" aria-label="Vídeo feito no Corte com letra automática"></video></div>
+      <div class="copy tl">
+        <p class="num" data-from="12" data-to="84">84<small data-i18n="cap.unit">modelos</small></p>
+        <p class="num-label" data-i18n="cap.label">de texto prontos, com 16 fontes e animações palavra a palavra.</p>
+      </div>
+      <div class="copy br">
+        <h2 class="fx" data-i18n="cap.title">Letras que se escrevem sozinhas.</h2>
+        <p data-i18n="cap.text">O Corte ouve a música ou a voz no teu PC e escreve as legendas sincronizadas, palavra a palavra. Este vídeo foi exportado pelo próprio Corte.</p>
+        <button class="btn ghost" id="sound" type="button"><span data-i18n="demo.sound">Ligar som</span></button>
+      </div>
+      <div class="callouts" aria-hidden="true">
+        <div class="callout" style="left:58.5%;top:42%"><i></i><span><b data-i18n="cap.c1">Automáticas</b><em data-i18n="cap.c1d">no teu PC, sem enviar nada</em></span></div>
+        <div class="callout" style="left:58.5%;top:66%"><i></i><span><b data-i18n="cap.c2">Karaoke</b><em data-i18n="cap.c2d">a palavra cantada acende</em></span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Transitions: the editor turns towards you. -->
+  <section class="chapter" id="transicoes" data-glow="60,140,255" data-pill="#3d8bff">
+    <div class="stage">
+      <div class="ambient" style="--ax:40%"></div>
+      <div class="floor"></div>
+      <div class="device"><img src="img/news-transitions.png" alt="Galeria de transições do Corte" width="1600" height="1000" loading="lazy"></div>
+      <div class="copy tr">
+        <p class="num" data-from="0" data-to="32">32<small data-i18n="tr.unit">transições</small></p>
+        <h2 class="fx" data-i18n="tr.title">Corta. Junta. Sem costuras.</h2>
+        <p data-i18n="tr.text">Escolhe uma e aplica-a a todos os cortes, ou carrega em «Automático» e o Corte varia sozinho. Ctrl+Z desfaz tudo.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Sound: a waveform glows in blue, the number counts to 47. -->
+  <section class="chapter" id="som" data-glow="120,90,255" data-pill="#9d7bff">
+    <div class="stage">
+      <div class="ambient"></div>
+      <div class="wave" aria-hidden="true"></div>
+      <div class="copy tl">
+        <p class="num" data-from="0" data-to="47">47<small data-i18n="sfx.unit">sons</small></p>
+        <h2 class="fx" data-i18n="sfx.title">Som de cinema. Sem direitos de autor.</h2>
+        <p data-i18n="sfx.text">Impactos, braams, risers, whooshes, chuva, trovões… criados pelo próprio Corte. Usa-os em qualquer vídeo, até nos monetizados.</p>
+      </div>
+      <div class="sound-chips" aria-hidden="true"><span>Impacto cinematográfico</span><span>Braam</span><span>Sub drop</span><span>Riser de tensão</span><span>Whoosh</span><span>Trovão</span><span>Batimento cardíaco</span></div>
+    </div>
+  </section>
+
+  <!-- 5. Stickers: pick a category, the stickers change. -->
+  <section class="chapter" id="stickers" data-glow="255,79,163" data-pill="#ff4fa3">
+    <div class="stage">
+      <div class="ambient" style="--ax:62%"></div>
+      <div class="floor" style="left:62%"></div>
+      <div class="sticker-stage" aria-hidden="true">
+        <img src="img/stickers/laugh.png" alt=""><img src="img/stickers/heart-eyes.png" alt=""><img src="img/stickers/cool.png" alt="">
+      </div>
+      <div class="copy tl" style="top:20vh">
+        <h2 class="fx" data-i18n="st.title">Um clique. Dez categorias.</h2>
+        <p data-i18n="st.text">53 stickers animados, desenhados pelo Corte. Arrasta, redimensiona e anima com keyframes. Ou usa as tuas imagens.</p>
+        <div class="swatches" role="group" aria-label="Categorias de stickers">
+          <button class="swatch" type="button" aria-pressed="true" data-set="laugh,heart-eyes,cool" data-glow="255,200,60"><span style="background:linear-gradient(135deg,#ffd84f,#ff9f1a)"></span><b>Emoji</b><em data-i18n="st.emoji">risos e caretas</em></button>
+          <button class="swatch" type="button" aria-pressed="false" data-set="heart,bow,lips" data-glow="255,79,163"><span style="background:linear-gradient(135deg,#ff7ab6,#e0203a)"></span><b data-i18n="st.love">Amor</b><em data-i18n="st.loved">corações e laços</em></button>
+          <button class="swatch" type="button" aria-pressed="false" data-set="balloons,birthday,fireworks" data-glow="80,180,255"><span style="background:linear-gradient(135deg,#3fb6ff,#c77dff)"></span><b data-i18n="st.party">Festa</b><em data-i18n="st.partyd">balões e confetes</em></button>
+          <button class="swatch" type="button" aria-pressed="false" data-set="pink-flower,butterfly,sun" data-glow="120,220,120"><span style="background:linear-gradient(135deg,#7be08a,#ffd21f)"></span><b data-i18n="st.nature">Natureza</b><em data-i18n="st.natured">flores e sol</em></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. AI agents: a request and the tools Claude uses. -->
+  <section class="chapter" id="ia" data-glow="44,200,216" data-pill="#2cc8d8">
+    <div class="stage">
+      <div class="ambient" style="--ax:62%"></div>
+      <div class="agent">
+        <div class="chat">
+          <div class="ask" data-i18n="ai.ask">Cria um vídeo vertical com os meus clips, põe transições, um título em néon e um impacto no início. Exporta.</div>
+          <div class="tools" aria-hidden="true">
+            <div class="tool"><b>create_project</b> 9:16</div>
+            <div class="tool"><b>import_media</b> 6 ficheiros</div>
+            <div class="tool"><b>auto_transitions</b></div>
+            <div class="tool"><b>add_text</b> «O FILME» · Néon rosa</div>
+            <div class="tool"><b>add_sound_effect</b> Impacto cinematográfico</div>
+            <div class="tool"><b>export_video</b> 1080p</div>
+          </div>
+          <div class="done" data-i18n="ai.done">Pronto: o vídeo está na pasta Vídeos e o projeto abriu no Corte.</div>
+        </div>
+      </div>
+      <div class="copy tl">
+        <p class="num" data-from="0" data-to="20">20<small data-i18n="ai.unit">ferramentas</small></p>
+        <h2 class="fx" data-i18n="ai.title">Pede. A IA edita.</h2>
+        <p data-i18n="ai.text">Liga o Corte ao Claude com um clique (Menu → Agentes de IA). O agente monta a linha do tempo, põe títulos, sons e transições e exporta, e tu vês tudo ao vivo.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. Finale: CORTE again, the light changes, the download count. -->
+  <section class="chapter" id="final" data-glow="255,90,31" data-pill="#ff5a1f">
+    <div class="stage">
+      <div class="ambient"></div>
+      <p class="giant" aria-hidden="true">CORTE</p>
+      <div class="floor"></div>
+      <div class="device" style="width:min(44vw,700px)"><img src="img/editor.png" alt="" width="1600" height="900" loading="lazy"></div>
+      <div class="copy tl">
+        <p class="num" id="dl-stat" data-from="0" data-to="0">—<small data-i18n="st.dl">downloads</small></p>
+        <p class="num-label" data-i18n="final.label">do instalador, contados pelo GitHub em todas as versões.</p>
+      </div>
+      <div class="copy bl">
+        <h2 class="fx" data-i18n="final.title">Faz o próximo.</h2>
+      </div>
+      <div class="copy br">
+        <div class="cta">
+          <a class="btn dl" href="https://github.com/chibangar/corte-site/releases/latest/download/Corte-Setup.exe"><span data-i18n="hero.download">Descarregar grátis</span></a>
+          <a class="btn ghost" href="#tudo" data-i18n="final.compare">O que está incluído</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. Everything included. -->
+  <section id="tudo">
+    <div class="wrap">
+      <span class="eyebrow" data-i18n="all.eyebrow">Grátis. Mesmo.</span>
+      <h2 class="fx" data-i18n="all.title">Tudo incluído.</h2>
+      <div class="specs">
+        <div class="spec hi">
+          <h3 data-i18n="all.edit">Editar</h3>
+          <dl>
+            <div><dt data-i18n="all.tr">Transições</dt><dd>32</dd></div>
+            <div><dt data-i18n="all.fx">Efeitos animados</dt><dd>34</dd></div>
+            <div><dt>Stickers</dt><dd>53</dd></div>
+            <div><dt data-i18n="all.filters">Filtros</dt><dd>16</dd></div>
+          </dl>
+        </div>
+        <div class="spec">
+          <h3 data-i18n="all.text">Texto e legendas</h3>
+          <dl>
+            <div><dt data-i18n="all.tpl">Modelos de texto</dt><dd>84</dd></div>
+            <div><dt data-i18n="all.fonts">Fontes de legendas</dt><dd>16</dd></div>
+            <div><dt data-i18n="all.auto">Legendas automáticas</dt><dd>✓<small data-i18n="all.local">no teu PC</small></dd></div>
+            <div><dt data-i18n="all.voices">Vozes para narração</dt><dd>3</dd></div>
+          </dl>
+        </div>
+        <div class="spec">
+          <h3 data-i18n="all.out">Som, IA e exportação</h3>
+          <dl>
+            <div><dt data-i18n="all.sfx">Efeitos sonoros</dt><dd>47</dd></div>
+            <div><dt data-i18n="all.ai">Ferramentas para agentes de IA</dt><dd>20</dd></div>
+            <div><dt data-i18n="all.res">Resolução máxima</dt><dd>4K</dd></div>
+            <div><dt data-i18n="all.wm">Marcas de água</dt><dd>0</dd></div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. Download and install. -->
+  <section id="instalar">
+    <div class="wrap install-grid">
+      <div>
+        <span class="eyebrow" data-i18n="inst.eyebrow">Instalar</span>
+        <h2 data-i18n="inst.title">Pronto em menos de um minuto.</h2>
+        <ol class="steps">
+          <li><div><b data-i18n="s1.t">Descarrega</b><span data-i18n="s1.d">Carrega em «Descarregar grátis» e abre o Corte-Setup.exe.</span></div></li>
+          <li><div><b data-i18n="s2.t">Se o Windows avisar</b><span data-i18n="s2.d">Em «O Windows protegeu o PC», carrega em «Mais informações» e depois em «Executar mesmo assim».</span></div></li>
+          <li><div><b data-i18n="s3.t">Segue os passos</b><span data-i18n="s3.d">Não precisa de administrador. Se faltar o FFmpeg, o instalador oferece-se para o instalar da fonte oficial.</span></div></li>
+          <li><div><b data-i18n="s4.t">Começa a editar</b><span data-i18n="s4.d">A partir daí o Corte atualiza-se sozinho e avisa no ecrã quando há uma versão nova.</span></div></li>
+        </ol>
+        <div class="cta" style="margin-top:26px">
+          <a class="btn dl" href="https://github.com/chibangar/corte-site/releases/latest/download/Corte-Setup.exe"><span data-i18n="hero.download">Descarregar grátis</span></a>
+          <span class="rel-info" style="color:var(--dim);font-size:13px">v0.1.19 · 8,0 MB</span>
+        </div>
+        <div class="downloads" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg><b class="dl-total">0</b> <span data-i18n="dl.people">downloads do instalador</span></div>
+        <div class="small-links">
+          <a href="#download-countries" data-i18n="countries.shortcut">Ver países →</a>
+          <a href="#novidades" data-i18n="news.shortcut">Ver novidades →</a>
+        </div>
+      </div>
+      <div>
+        <div class="note-box warn" role="note"><strong data-i18n="beta.tag">Versão beta</strong><span data-i18n="beta.text">O Corte ainda não está totalmente pronto: é uma versão beta e algumas funções podem ter erros ou mudar. Guarda cópias dos teus vídeos importantes.</span></div>
+        <div class="note-box" role="note"><strong data-i18n="security.title">Tens dúvidas sobre a segurança do ficheiro?</strong><span data-i18n="security.text">Antes de abrir o instalador, podes enviar o Corte-Setup.exe para análise no VirusTotal e consultar os resultados.</span> <a href="https://www.virustotal.com/gui/home/upload" target="_blank" rel="noopener noreferrer" data-i18n="security.link">Analisar no VirusTotal ↗</a></div>
+        <div class="note-box" role="note"><strong data-i18n="update.available">O Corte atualiza-se sozinho.</strong><span data-i18n="update.migrate">Desde a 0.1.9 descarrega as versões novas em segundo plano e avisa no ecrã. Quem tem a 0.1.0 original precisa de instalar uma versão recente pelo site uma vez.</span></div>
+      </div>
+    </div>
+  </section>
+
   <section id="novidades" aria-labelledby="news-title">
     <div class="wrap">
       <div class="center reveal">
@@ -384,165 +309,6 @@
         </article>
       </div>
       <p class="news-release-note" data-i18n="news.note">Estas novidades já estão no instalador 0.1.19. A partir da 0.1.9, o Corte descarrega as atualizações sozinho e instala-as com um clique quando o fechas; nada é instalado sem essa confirmação, e podes desligar em Menu → Atualizações. Quem usa a 0.1.0 original precisa de instalar uma versão recente pelo site uma vez.</p>
-    </div>
-  </section>
-
-  <section id="demo">
-    <div class="wrap center reveal">
-      <span class="eyebrow" data-i18n="demo.eyebrow">Feito no Corte</span>
-      <h2 data-i18n="demo.title">Letra gerada sozinha. Estilo Lendário.</h2>
-      <p class="lead" data-i18n="demo.lead">Este vídeo foi exportado pelo próprio Corte: a música foi transcrita, cada palavra aparece quando é cantada e o pó dourado mexe-se por cima.</p>
-    </div>
-    <div class="wrap reveal">
-      <div class="player">
-        <div class="top"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i>&nbsp; Corte — Reprodutor</div>
-        <video id="demo-video" src="media/demo.mp4" poster="media/demo-poster.jpg" muted loop playsinline preload="metadata"></video>
-        <button class="sound" id="sound" type="button">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4z"/><path id="sound-wave" d="M23 9l-6 6M17 9l6 6"/></svg>
-          <span data-i18n="demo.sound">Ligar som</span>
-        </button>
-      </div>
-    </div>
-  </section>
-
-  <!-- FEATURES -->
-  <section id="funcoes">
-    <div class="wrap">
-      <div class="reveal">
-        <span class="eyebrow" data-i18n="features.eyebrow">Funções</span>
-        <h2 data-i18n="features.title">Tudo o que precisas, num só sítio</h2>
-        <p class="lead" data-i18n="features.lead">Do primeiro corte até à exportação, sem marcas de água e sem conta.</p>
-      </div>
-      <div class="grid">
-        <div class="card reveal">
-          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 15h4M13 15h4M7 11h10"/></svg></div>
-          <h3 data-i18n="f1.t">Legendas automáticas</h3>
-          <p data-i18n="f1.d">Reconhece a fala e cria legendas sincronizadas em muitas línguas, no teu PC, sem enviar nada para a internet.</p>
-        </div>
-        <div class="card reveal">
-          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>
-          <h3 data-i18n="f2.t">Letras de músicas</h3>
-          <p data-i18n="f2.d">Gera a letra em karaoke: grupos de palavras e a palavra cantada a acender no momento certo.</p>
-        </div>
-        <div class="card reveal">
-          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7V5h16v2M9 19h6M12 5v14"/></svg></div>
-          <h3 data-i18n="f3.t">84 modelos de texto</h3>
-          <p data-i18n="f3.d">Néon, 3D, gradientes, caixas, glitch, Lendário… com animações e 16 fontes incluídas.</p>
-        </div>
-        <div class="card reveal">
-          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 17l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7z"/></svg></div>
-          <h3 data-i18n="f4.t">Efeitos que mexem</h3>
-          <p data-i18n="f4.d">Chuva, neve, pó dourado, brilhos e filtros, animados ao vivo na pré-visualização.</p>
-        </div>
-        <div class="card reveal">
-          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg></div>
-          <h3 data-i18n="f5.t">Linha do tempo completa</h3>
-          <p data-i18n="f5.d">Vídeo, imagem, áudio e microfone; dividir, velocidade, volume, transições, marcadores e capa.</p>
-        </div>
-        <div class="card reveal">
-          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M13 2 3 14h9l-1 8 10-12h-9z"/></svg></div>
-          <h3 data-i18n="f6.t">Exportação rápida</h3>
-          <p data-i18n="f6.d">Até 4K em H.264, HEVC, AV1 ou ProRes, com aceleração por GPU. Os projetos guardam-se sozinhos.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CAPTION STYLES -->
-  <section id="legendas">
-    <div class="wrap">
-      <div class="center reveal">
-        <span class="eyebrow" data-i18n="styles.eyebrow">Modelos de legendas</span>
-        <h2 data-i18n="styles.title">Legendas com personalidade</h2>
-        <p class="lead" data-i18n="styles.lead">Alguns dos estilos do Corte, a mexer como no teu vídeo. Escolhes um e ele aplica-se à letra toda.</p>
-      </div>
-      <div class="styles">
-        <div class="style s-karaoke reveal"><div class="stage" data-demo="karaoke"></div><span class="name">Karaoke amarelo</span></div>
-        <div class="style s-legend reveal"><div class="stage" data-demo="legend"></div><span class="name">Lendário</span></div>
-        <div class="style s-box reveal"><div class="stage" data-demo="box"></div><span class="name">Caixa karaoke</span></div>
-        <div class="style s-neon reveal"><div class="stage" data-i18n="styles.neon">Esta noite</div><span class="name">Script néon</span></div>
-        <div class="style s-glitch reveal"><div class="stage" data-i18n="styles.glitch" data-text="Sem parar">Sem parar</div><span class="name">Glitch RGB</span></div>
-        <div class="style s-type reveal"><div class="stage" data-demo="type"></div><span class="name">Máquina de escrever</span></div>
-        <div class="style s-comic reveal"><div class="stage" data-i18n-words="styles.comic">Uau que fixe</div><span class="name">Banda desenhada</span></div>
-        <div class="style s-grad reveal"><div class="stage" data-i18n="styles.grad">Gradiente</div><span class="name">Gradiente lilás</span></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- TIMELINE + STATS -->
-  <section>
-    <div class="wrap">
-      <div class="center reveal">
-        <span class="eyebrow" data-i18n="tl.eyebrow">Linha do tempo</span>
-        <h2 data-i18n="tl.title">Corta, junta e sincroniza</h2>
-        <p class="lead" data-i18n="tl.lead">Faixas de texto, efeitos, vídeo e áudio com forma de onda. Arrasta, divide e vê o resultado na hora.</p>
-      </div>
-      <div class="tl reveal" aria-hidden="true">
-        <div class="ruler"><span>00:00</span><span>00:30</span><span>01:00</span><span>01:30</span><span>02:00</span><span>02:30</span></div>
-        <div class="rows">
-          <div class="row"><b>Letras</b><div class="lane" id="cap-lane"></div></div>
-          <div class="row"><b>Efeitos</b><div class="lane"><div class="clip fx" style="left:2%;width:58%"></div><div class="clip fx" style="left:66%;width:30%"></div></div></div>
-          <div class="row"><b>Vídeo</b><div class="lane"><div class="clip vid" style="left:1%;width:47%"></div><div class="clip vid" style="left:48.5%;width:50%"></div></div></div>
-          <div class="row"><b>Áudio</b><div class="lane"><div class="clip aud" style="left:1%;width:97%"></div></div></div>
-          <div class="head"></div>
-        </div>
-      </div>
-      <div class="stats" style="margin-top:28px">
-        <div class="stat reveal"><div class="n" id="dl-stat" data-count="0">0</div><div class="l" data-i18n="st.dl">downloads</div></div>
-        <div class="stat reveal"><div class="n" data-count="84">0</div><div class="l" data-i18n="st.tpl">modelos de texto</div></div>
-        <div class="stat reveal"><div class="n" data-count="34">0</div><div class="l" data-i18n="st.fx">efeitos animados</div></div>
-        <div class="stat reveal"><div class="n" data-count="16">0</div><div class="l" data-i18n="st.tr">transições e filtros</div></div>
-        <div class="stat reveal"><div class="n" data-count="4" data-suffix="K">0</div><div class="l" data-i18n="st.res">de resolução máxima</div></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- GALLERY -->
-  <section style="padding-top:0">
-    <div class="marquee reveal">
-      <div class="track">
-        <img src="img/editor.png" alt="" loading="lazy">
-        <img src="img/modelos.png" alt="" loading="lazy">
-        <img src="img/karaoke.png" alt="" loading="lazy">
-        <img src="media/demo-poster.jpg" alt="" loading="lazy">
-        <img src="img/editor.png" alt="" loading="lazy">
-        <img src="img/modelos.png" alt="" loading="lazy">
-        <img src="img/karaoke.png" alt="" loading="lazy">
-        <img src="media/demo-poster.jpg" alt="" loading="lazy">
-      </div>
-    </div>
-  </section>
-
-  <!-- INSTALL -->
-  <section id="instalar">
-    <div class="wrap">
-      <div class="reveal">
-        <span class="eyebrow" data-i18n="inst.eyebrow">Instalar</span>
-        <h2 data-i18n="inst.title">Pronto em menos de um minuto</h2>
-      </div>
-      <ol class="steps">
-        <li class="reveal"><b data-i18n="s1.t">Descarrega</b><span data-i18n="s1.d">Carrega em "Descarregar para Windows" e abre o Corte-Setup.exe.</span></li>
-        <li class="reveal"><b data-i18n="s2.t">Se o Windows avisar</b><span data-i18n="s2.d">Em "O Windows protegeu o PC", carrega em "Mais informações" e depois em "Executar mesmo assim".</span></li>
-        <li class="reveal"><b data-i18n="s3.t">Segue os passos</b><span data-i18n="s3.d">Não precisa de administrador. Se faltar o FFmpeg, o instalador oferece instalá-lo da fonte oficial.</span></li>
-        <li class="reveal"><b data-i18n="s4.t">Começa a editar</b><span data-i18n="s4.d">Abre o Corte no menu Iniciar. Na primeira legenda automática, a app transfere o modelo de voz (~140 MB).</span></li>
-      </ol>
-      <div class="note reveal" data-i18n="inst.note">Para desinstalar: Definições do Windows → Aplicações → Corte → Desinstalar.</div>
-    </div>
-  </section>
-
-  <!-- FINAL CTA -->
-  <section class="final">
-    <span class="ring"></span><span class="ring"></span><span class="ring"></span>
-    <div class="wrap reveal">
-      <h2 data-i18n="final.title">Faz o teu próximo vídeo com o Corte</h2>
-      <p class="lead" style="margin:0 auto 32px" data-i18n="final.lead">Grátis, leve e em português.</p>
-      <div class="cta">
-        <a class="btn dl" href="#">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>
-          <span data-i18n="hero.download">Descarregar para Windows</span>
-        </a>
-      </div>
-      <div class="meta"><span class="rel-info">v0.1.15 · 8,0 MB</span> · <span data-i18n="beta.short">versão beta, ainda em desenvolvimento</span></div>
     </div>
   </section>
 </main>
@@ -599,40 +365,13 @@
 
 <script>
 (() => {
+  const $ = s => document.querySelector(s);
+  const $$ = s => [...document.querySelectorAll(s)];
+
   // ---------- download links ----------
   const REPO = "chibangar/corte-site";
   const DL = "https://github.com/" + REPO + "/releases/latest/download/Corte-Setup.exe";
-  document.querySelectorAll(".dl").forEach(a => { a.href = DL; });
-  // Latest version, size and total downloads (every release), straight from
-  // GitHub; the page keeps its own text if the request fails.
-  fetch("https://api.github.com/repos/" + REPO + "/releases?per_page=100")
-    .then(r => r.ok ? r.json() : null)
-    .then(releases => {
-      if (!Array.isArray(releases)) return;
-      const published = releases.filter(r => !r.draft && !r.prerelease);
-      const setup = rel => (rel.assets || []).find(a => a.name === "Corte-Setup.exe");
-      const latest = published[0];
-      if (latest) {
-        const asset = setup(latest);
-        const size = asset ? " · " + (asset.size / 1048576).toFixed(1).replace(".", ",") + " MB" : "";
-        document.querySelectorAll(".rel-info").forEach(el => { el.textContent = latest.tag_name + size; });
-      }
-      const total = published.reduce((n, rel) => n + (setup(rel) ? setup(rel).download_count : 0), 0);
-      window.CORTE_DOWNLOAD_TOTAL=total;
-      window.dispatchEvent(new CustomEvent('corte-download-total',{detail:total}));
-      document.querySelector(".dl-total").textContent = total.toLocaleString(lang === "en" ? "en" : "pt-PT");
-      const label = document.querySelector(".downloads [data-i18n]");
-      label.dataset.i18n = total === 1 ? "dl.person" : "dl.people";
-      label.textContent = (lang === "en" ? EN : PT)[label.dataset.i18n];
-      document.querySelector(".downloads").hidden = false;
-      const stat = document.getElementById("dl-stat");
-      stat.dataset.count = total;
-      // If the stats are already on screen, count up now; otherwise the reveal does it.
-      if (stat.closest(".reveal.in")) countUp(stat);
-    })
-    .catch(() => {});
-
-  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  $$(".dl").forEach(a => { a.href = DL; });
 
   // ---------- translations ----------
   const EN = {
@@ -668,261 +407,146 @@
     "countries.note":"The two counts measure different things and do not have to match. GitHub does not provide countries for past downloads, direct links or in-app updates. Website click countries are approximated through Cloudflare using the IP; blockers, VPNs and network failures can affect recording. We store only country totals, without confirming download completion.",
     "countries.dialog":"Where are you visiting from?", "countries.info":"Help us get to know the community. We only store a total per country, without your name or precise location. This step is optional.",
     "countries.label":"Your country", "countries.continue":"Continue and download", "countries.skip":"Skip and download",
-    "nav.demo": "Demo", "nav.features": "Features", "nav.styles": "Captions", "nav.install": "Install", "nav.download": "Download",
-    "hero.badge": "Free for Windows",
-    "hero.title": "Edit videos with captions that dance",
-    "hero.text": "Corte is a video editor that writes captions and song lyrics for you, synced word by word, with animated effects and ready-made text templates.",
-    "hero.download": "Download for Windows", "hero.watch": "Watch demo ▶", "hero.meta": "Windows 10 and 11 (64-bit)",
-    "demo.eyebrow": "Made with Corte", "demo.title": "Lyrics written by itself. Legendary style.",
-    "demo.lead": "This video was exported by Corte itself: the song was transcribed, each word appears when it is sung and the golden dust moves on top.",
-    "demo.sound": "Sound on", "demo.mute": "Sound off",
-    "features.eyebrow": "Features", "features.title": "Everything you need, in one place",
-    "features.lead": "From the first cut to the export, with no watermarks and no account.",
-    "f1.t": "Automatic captions", "f1.d": "Recognises speech and creates synced captions in many languages, on your PC, without sending anything online.",
-    "f2.t": "Song lyrics", "f2.d": "Generates the lyrics as karaoke: groups of words, with the sung word lighting up at the right moment.",
-    "f3.t": "84 text templates", "f3.d": "Neon, 3D, gradients, boxes, glitch, Legendary… with animations and 16 fonts included.",
-    "f4.t": "Effects that move", "f4.d": "Rain, snow, golden dust, sparkles and filters, animated live in the preview.",
-    "f5.t": "Full timeline", "f5.d": "Video, images, audio and microphone; split, speed, volume, transitions, markers and cover.",
-    "f6.t": "Fast export", "f6.d": "Up to 4K in H.264, HEVC, AV1 or ProRes, with GPU acceleration. Projects save themselves.",
-    "styles.eyebrow": "Caption templates", "styles.title": "Captions with personality",
-    "styles.lead": "Some of Corte's styles, moving just like in your video. Pick one and it applies to the whole lyric.",
-    "styles.neon": "Tonight", "styles.glitch": "Non stop", "styles.comic": "Wow so cool", "styles.grad": "Gradient",
-    "tl.eyebrow": "Timeline", "tl.title": "Cut, join and sync",
-    "tl.lead": "Text, effect, video and audio tracks with waveforms. Drag, split and see the result instantly.",
     "beta.tag": "Beta version",
     "beta.text": "Corte is not fully finished yet: this is a beta and some features may have bugs or change. Keep copies of your important videos.",
     "beta.short": "beta version, still in development",
     "dl.people": "installer downloads", "dl.person": "installer download", "st.dl": "downloads",
-    "st.tpl": "text templates", "st.fx": "animated effects", "st.tr": "transitions and filters", "st.res": "maximum resolution",
-    "inst.eyebrow": "Install", "inst.title": "Ready in under a minute",
-    "s1.t": "Download", "s1.d": "Click \"Download for Windows\" and open Corte-Setup.exe.",
+    "foot.copy": "© 2026 Corte. All rights reserved.",
+    "foot.credits": "Uses <a href=\"https://ffmpeg.org\">FFmpeg</a>, <a href=\"https://github.com/ggml-org/whisper.cpp\">whisper.cpp</a> and fonts from <a href=\"https://fonts.google.com\">Google Fonts</a>.",
+    "nav.skip": "Skip to the download", "nav.captions": "Captions", "nav.sound": "Sound", "nav.ai": "AI", "nav.download": "Download",
+    "hero.title": "Built to cut everything.",
+    "hero.text": "A free video editor for Windows: automatic captions, transitions, stickers, cinematic sounds and AI agents. No watermarks, no account.",
+    "hero.download": "Download free", "hero.news": "See what's new →", "hero.free": "free",
+    "cap.unit": "templates", "cap.label": "ready-made text templates, with 16 fonts and word-by-word animations.",
+    "cap.title": "Lyrics that write themselves.",
+    "cap.text": "Corte listens to the song or the voice on your PC and writes the captions in sync, word by word. This video was exported by Corte itself.",
+    "cap.c1": "Automatic", "cap.c1d": "on your PC, nothing is uploaded", "cap.c2": "Karaoke", "cap.c2d": "the sung word lights up",
+    "demo.sound": "Sound on", "demo.mute": "Sound off",
+    "tr.unit": "transitions", "tr.title": "Cut. Join. Seamless.",
+    "tr.text": "Pick one and apply it to every cut, or press \"Automático\" and Corte varies them for you. Ctrl+Z undoes it all.",
+    "sfx.unit": "sounds", "sfx.title": "Cinema sound. No copyright.",
+    "sfx.text": "Hits, braams, risers, whooshes, rain, thunder… made by Corte itself. Use them in any video, even monetised ones.",
+    "st.title": "One click. Ten categories.",
+    "st.text": "53 animated stickers drawn by Corte. Drag, resize and animate them with keyframes. Or use your own pictures.",
+    "st.emoji": "laughs and faces", "st.love": "Love", "st.loved": "hearts and bows", "st.party": "Party", "st.partyd": "balloons and confetti", "st.nature": "Nature", "st.natured": "flowers and sun",
+    "ai.ask": "Make a vertical video from my clips, add transitions, a neon title and a hit at the start. Export it.",
+    "ai.done": "Done: the video is in your Videos folder and the project opened in Corte.",
+    "ai.unit": "tools", "ai.title": "Ask. AI edits.",
+    "ai.text": "Connect Corte to Claude in one click (Menu → Agentes de IA). The agent builds the timeline, adds titles, sounds and transitions and exports, and you watch it all live.",
+    "st.dl": "downloads", "final.label": "of the installer, counted by GitHub across every version.",
+    "final.title": "Make the next one.", "final.compare": "What's included",
+    "all.eyebrow": "Free. Really.", "all.title": "Everything included.",
+    "all.edit": "Edit", "all.tr": "Transitions", "all.fx": "Animated effects", "all.filters": "Filters",
+    "all.text": "Text and captions", "all.tpl": "Text templates", "all.fonts": "Caption fonts", "all.auto": "Automatic captions", "all.local": "on your PC", "all.voices": "Narration voices",
+    "all.out": "Sound, AI and export", "all.sfx": "Sound effects", "all.ai": "Tools for AI agents", "all.res": "Maximum resolution", "all.wm": "Watermarks",
+    "inst.eyebrow": "Install", "inst.title": "Ready in under a minute.",
+    "s1.t": "Download", "s1.d": "Press \"Download free\" and open Corte-Setup.exe.",
     "s2.t": "If Windows warns you", "s2.d": "On \"Windows protected your PC\", click \"More info\" and then \"Run anyway\".",
     "s3.t": "Follow the steps", "s3.d": "No administrator needed. If FFmpeg is missing, the installer offers to install it from the official source.",
-    "s4.t": "Start editing", "s4.d": "Open Corte from the Start menu. On the first automatic caption, the app downloads the speech model (~140 MB).",
-    "inst.note": "To uninstall: Windows Settings → Apps → Corte → Uninstall.",
-    "final.title": "Make your next video with Corte", "final.lead": "Free, light and easy.",
-    "foot.copy": "© 2026 Corte. All rights reserved.",
-    "foot.credits": "Uses <a href=\"https://ffmpeg.org\">FFmpeg</a>, <a href=\"https://github.com/ggml-org/whisper.cpp\">whisper.cpp</a> and fonts from <a href=\"https://fonts.google.com\">Google Fonts</a>."
+    "s4.t": "Start editing", "s4.d": "From then on Corte updates itself and shows a notice on screen when a new version is out.",
+    "update.available": "Corte updates itself.", "update.migrate": "Since 0.1.9 it downloads new versions in the background and shows a notice on screen. Users of the original 0.1.0 must install a recent version from the website once."
   };
   const PT = {};
   const META = {
-    pt: { title: document.title, description: document.querySelector('meta[name="description"]').content },
-    en: { title: "Corte — video editor", description: "Corte: a free video editor for Windows with automatic captions and lyrics, karaoke, animated effects and fast export." }
+    pt: { title: document.title, description: $('meta[name="description"]').content },
+    en: { title: "Corte — video editor", description: "Corte: a free video editor for Windows with automatic captions, transitions, stickers, copyright-free sound effects and AI agents." }
   };
-  document.querySelectorAll("[data-i18n]").forEach(el => { PT[el.dataset.i18n] = el.textContent; });
-  document.querySelectorAll("[data-i18n-html]").forEach(el => { PT[el.dataset.i18nHtml] = el.innerHTML; });
-  document.querySelectorAll("[data-i18n-words]").forEach(el => { PT[el.dataset.i18nWords] = el.textContent; });
-
-  // Demo lyrics for the live caption cards, per language.
-  const LYRICS = {
-    pt: [["Canta", "comigo"], ["esta", "noite"], ["sem", "parar"]],
-    en: [["Sing", "with", "me"], ["all", "night"], ["non", "stop"]]
-  };
-  const LEGEND = { pt: [["eres", "el", "Eco"], ["en", "mi"], ["cada", "final", "es"]], en: [["you", "are", "the", "echo"], ["in", "me"], ["every", "end", "is"]] };
-  const TYPE = { pt: "Era uma vez…", en: "Once upon a time…" };
+  $$("[data-i18n]").forEach(el => { PT[el.dataset.i18n] = el.textContent; });
+  $$("[data-i18n-html]").forEach(el => { PT[el.dataset.i18nHtml] = el.innerHTML; });
+  PT["demo.mute"] = "Desligar som";
+  PT["dl.people"] = "downloads do instalador";
+  PT["dl.person"] = "download do instalador";
   let lang = "pt";
-
-  // Splits an element's text into word spans (for karaoke / bouncing words).
-  function words(el, text) {
-    el.textContent = "";
-    text.split(/\s+/).forEach((w, i) => {
-      const s = document.createElement("span");
-      s.className = el.id === "karaoke" ? "w" : "k";
-      s.textContent = w;
-      el.appendChild(s);
-      el.appendChild(document.createTextNode(" "));
-    });
-  }
 
   function setLang(l) {
     lang = l === "en" ? "en" : "pt";
     const dict = lang === "en" ? EN : PT;
-    document.querySelectorAll("[data-i18n]").forEach(el => {
+    $$("[data-i18n]").forEach(el => {
+      // Numbers keep their counter: only the unit inside them is translated.
       el.textContent = dict[el.dataset.i18n] ?? PT[el.dataset.i18n];
-      if (el.dataset.text !== undefined) el.dataset.text = el.textContent;
     });
-    document.querySelectorAll("[data-i18n-html]").forEach(el => { el.innerHTML = dict[el.dataset.i18nHtml] ?? PT[el.dataset.i18nHtml]; });
-    document.querySelectorAll("[data-i18n-words]").forEach(el => words(el, dict[el.dataset.i18nWords] ?? PT[el.dataset.i18nWords]));
+    $$("[data-i18n-html]").forEach(el => { el.innerHTML = dict[el.dataset.i18nHtml] ?? PT[el.dataset.i18nHtml]; });
     document.documentElement.lang = lang;
     document.title = META[lang].title;
-    document.querySelector('meta[name="description"]').content = META[lang].description;
-    document.querySelectorAll(".lang button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
+    $('meta[name="description"]').content = META[lang].description;
+    $$(".lang button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
     updateSoundLabel();
+    showTotal();
     try { localStorage.setItem("corte-lang", lang); } catch (e) {}
   }
-  document.querySelectorAll(".lang button").forEach(b => b.addEventListener("click", () => setLang(b.dataset.lang)));
+  $$(".lang button").forEach(b => b.addEventListener("click", () => setLang(b.dataset.lang)));
+
+  // ---------- version, size and downloads, straight from GitHub ----------
+  let total = null;
+  function showTotal() {
+    if (total === null) return;
+    const box = $(".downloads");
+    if (box) {
+      box.querySelector(".dl-total").textContent = total.toLocaleString(lang === "en" ? "en" : "pt-PT");
+      const label = box.querySelector("[data-i18n]");
+      label.dataset.i18n = total === 1 ? "dl.person" : "dl.people";
+      label.textContent = (lang === "en" ? EN : PT)[label.dataset.i18n];
+      box.hidden = false;
+    }
+  }
+  fetch("https://api.github.com/repos/" + REPO + "/releases?per_page=100")
+    .then(r => r.ok ? r.json() : null)
+    .then(releases => {
+      if (!Array.isArray(releases)) return;
+      const published = releases.filter(r => !r.draft && !r.prerelease);
+      const setup = rel => (rel.assets || []).find(a => a.name === "Corte-Setup.exe");
+      const latest = published[0];
+      if (latest) {
+        const asset = setup(latest);
+        const size = asset ? " · " + (asset.size / 1048576).toFixed(1).replace(".", ",") + " MB" : "";
+        $$(".rel-info").forEach(el => { el.textContent = latest.tag_name + size; });
+      }
+      total = published.reduce((n, rel) => n + (setup(rel) ? setup(rel).download_count : 0), 0);
+      window.CORTE_DOWNLOAD_TOTAL = total;
+      window.dispatchEvent(new CustomEvent("corte-download-total", { detail: total }));
+      showTotal();
+      // The finale's big number counts up to it (site.js listens for this).
+      const stat = $("#dl-stat");
+      if (stat) {
+        stat.dataset.to = total;
+        stat.firstChild.textContent = total.toLocaleString(lang === "en" ? "en" : "pt-PT");
+        window.dispatchEvent(new CustomEvent("corte-counter-ready", { detail: stat }));
+      }
+    })
+    .catch(() => {});
 
   // ---------- header ----------
-  const header = document.getElementById("top");
+  const header = $("#top");
   const onScroll = () => header.classList.toggle("scrolled", scrollY > 30);
   addEventListener("scroll", onScroll, { passive: true });
   onScroll();
 
-  // ---------- hero title karaoke ----------
-  let kStep = 0;
-  setInterval(() => {
-    const ws = [...document.querySelectorAll("#karaoke .w")];
-    if (!ws.length || reduced) return;
-    const n = ws.length + 3; // a short pause before it starts again
-    const i = kStep % n;
-    ws.forEach((w, j) => { w.classList.toggle("lit", j === i); w.classList.toggle("sung", j < i && i < ws.length); });
-    kStep++;
-  }, 420);
-
-  // ---------- live caption cards ----------
-  let tick = 0;
-  function frame() {
-    const g = LYRICS[lang];
-    const group = g[Math.floor(tick / 4) % g.length];
-    const sub = tick % 4; // which word is being sung (the 4th beat is a hold)
-    document.querySelectorAll('[data-demo="karaoke"], [data-demo="box"]').forEach(el => {
-      el.innerHTML = group.map((w, i) => '<span class="k' + (i === Math.min(sub, group.length - 1) ? " on" : "") + '">' + w + "</span>").join(" ");
-    });
-    const lg = LEGEND[lang];
-    const li = Math.floor(tick / 5) % lg.length;
-    const lw = lg[li];
-    const shown = Math.min(tick % 5 + 1, lw.length);
-    const el = document.querySelector('[data-demo="legend"]');
-    if (el.dataset.group !== lang + li) {
-      el.dataset.group = lang + li;
-      el.innerHTML = lw.map((w, i) => '<span class="' + (i === (li % lw.length) ? "c" : "") + '">' + w + "</span>").join("");
-      el.style.transform = ["translate(-40px,-20px)", "translate(40px,18px)", "translate(-10px,6px)"][li % 3];
-    }
-    [...el.children].forEach((s, i) => s.classList.toggle("on", i < shown));
-    const t = TYPE[lang];
-    const tp = tick % (t.length + 6);
-    document.querySelector('[data-demo="type"]').textContent = t.slice(0, Math.min(tp, t.length));
-    tick++;
-  }
-  if (reduced) {
-    tick = 2; frame();
-  } else {
-    setInterval(frame, 380);
-    frame();
-  }
-
-  // ---------- timeline caption clips ----------
-  const lane = document.getElementById("cap-lane");
-  let x = 2;
-  while (x < 96) {
-    const w = 1.2 + Math.random() * 3.2;
-    const c = document.createElement("div");
-    c.className = "clip cap";
-    c.style.left = x + "%";
-    c.style.width = w + "%";
-    lane.appendChild(c);
-    x += w + 0.4 + (Math.random() < 0.15 ? 5 : Math.random() * 1.2);
-  }
-
-  // ---------- scroll reveal + counters ----------
-  const io = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (!e.isIntersecting) return;
-      const el = e.target;
-      // Stagger cards in the same row.
-      const sibs = [...el.parentElement.children].filter(c => c.classList.contains("reveal"));
-      el.style.transitionDelay = (Math.max(0, sibs.indexOf(el)) % 4) * 90 + "ms";
-      el.classList.add("in");
-      el.querySelectorAll("[data-count]").forEach(countUp);
-      io.unobserve(el);
-    });
-  }, { threshold: 0.15 });
-  document.querySelectorAll(".reveal").forEach(el => io.observe(el));
-  function countUp(el) {
-    const end = +el.dataset.count, suffix = el.dataset.suffix || "";
-    if (reduced) { el.textContent = end + suffix; return; }
-    const t0 = performance.now(), dur = 1400;
-    const step = now => {
-      const p = Math.min(1, (now - t0) / dur);
-      el.textContent = Math.round(end * (1 - Math.pow(1 - p, 3))) + suffix;
-      if (p < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  }
-
-  // ---------- card spotlight ----------
-  document.querySelectorAll(".card").forEach(c => c.addEventListener("pointermove", e => {
-    const r = c.getBoundingClientRect();
-    c.style.setProperty("--mx", (e.clientX - r.left) + "px");
-    c.style.setProperty("--my", (e.clientY - r.top) + "px");
-  }));
+  // ---------- news cards reveal ----------
+  const io = new IntersectionObserver(entries => entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.classList.add("in");
+    io.unobserve(e.target);
+  }), { threshold: 0.12 });
+  $$("#novidades .reveal").forEach(el => io.observe(el));
 
   // ---------- demo video: plays when visible, sound toggle ----------
-  const video = document.getElementById("demo-video");
-  const soundBtn = document.getElementById("sound");
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const video = $("#demo-video");
+  const soundBtn = $("#sound");
   function updateSoundLabel() {
-    const label = soundBtn.querySelector("span");
-    label.textContent = (lang === "en" ? EN : PT)[video.muted ? "demo.sound" : "demo.mute"] || (video.muted ? PT["demo.sound"] : "Desligar som");
-    document.getElementById("sound-wave").setAttribute("d", video.muted ? "M23 9l-6 6M17 9l6 6" : "M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14");
+    if (!video || !soundBtn) return;
+    soundBtn.querySelector("span").textContent = (lang === "en" ? EN : PT)[video.muted ? "demo.sound" : "demo.mute"];
   }
-  PT["demo.mute"] = "Desligar som";
-  PT["dl.people"] = "downloads do instalador";
-  PT["dl.person"] = "download do instalador";
-  soundBtn.addEventListener("click", () => {
-    video.muted = !video.muted;
-    if (video.paused) video.play().catch(() => {});
-    updateSoundLabel();
-  });
-  new IntersectionObserver(es => es.forEach(e => {
-    if (e.isIntersecting) { if (!reduced) video.play().catch(() => {}); } else video.pause();
-  }), { threshold: 0.35 }).observe(video);
-  if (reduced) video.controls = true;
-
-  // ---------- golden dust in the hero ----------
-  const cv = document.getElementById("sparks");
-  const ctx = cv.getContext("2d");
-  let dots = [];
-  function resize() {
-    const dpr = Math.min(devicePixelRatio || 1, 2);
-    cv.width = cv.offsetWidth * dpr;
-    cv.height = cv.offsetHeight * dpr;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    const n = Math.round(cv.offsetWidth * cv.offsetHeight / 14000);
-    dots = Array.from({ length: n }, () => ({
-      x: Math.random() * cv.offsetWidth, y: Math.random() * cv.offsetHeight,
-      r: 0.6 + Math.random() * 2.2, vy: 0.15 + Math.random() * 0.5, vx: (Math.random() - 0.5) * 0.3,
-      p: Math.random() * Math.PI * 2, gold: Math.random() < 0.7
-    }));
-  }
-  // A glowing dot drawn once and stamped for every particle (much cheaper than shadowBlur).
-  function sprite(rgb) {
-    const s = document.createElement("canvas");
-    s.width = s.height = 32;
-    const g = s.getContext("2d");
-    const grad = g.createRadialGradient(16, 16, 0, 16, 16, 16);
-    grad.addColorStop(0, "rgba(255,255,255,1)");
-    grad.addColorStop(0.25, "rgba(" + rgb + ",1)");
-    grad.addColorStop(1, "rgba(" + rgb + ",0)");
-    g.fillStyle = grad;
-    g.fillRect(0, 0, 32, 32);
-    return s;
-  }
-  const GOLD = sprite("255,200,70"), CYAN = sprite("80,220,240");
-  let running = false;
-  function draw(t) {
-    const w = cv.offsetWidth, h = cv.offsetHeight;
-    ctx.clearRect(0, 0, w, h);
-    for (const d of dots) {
-      d.y -= d.vy; d.x += d.vx + Math.sin(t / 1400 + d.p) * 0.2;
-      if (d.y < -10) { d.y = h + 10; d.x = Math.random() * w; }
-      ctx.globalAlpha = 0.35 + 0.65 * (0.5 + 0.5 * Math.sin(t / 500 + d.p));
-      const s = d.r * 5;
-      ctx.drawImage(d.gold ? GOLD : CYAN, d.x - s / 2, d.y - s / 2, s, s);
-    }
-    ctx.globalAlpha = 1;
-    if (running) requestAnimationFrame(draw);
-  }
-  addEventListener("resize", resize);
-  resize();
-  if (reduced) {
-    draw(0);
-  } else {
-    // Only animate while the hero is on screen.
+  if (video && soundBtn) {
+    soundBtn.addEventListener("click", () => {
+      video.muted = !video.muted;
+      if (video.paused) video.play().catch(() => {});
+      updateSoundLabel();
+    });
     new IntersectionObserver(es => es.forEach(e => {
-      const was = running;
-      running = e.isIntersecting;
-      if (running && !was) requestAnimationFrame(draw);
-    })).observe(cv);
+      if (e.isIntersecting) { if (!reduced) video.play().catch(() => {}); } else video.pause();
+    }), { threshold: 0.35 }).observe(video);
+    if (reduced) video.controls = true;
   }
 
   // ---------- start ----------
