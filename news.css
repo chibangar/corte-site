@@ -22,3 +22,12 @@
 @media(prefers-reduced-motion:reduce){#novidades *,#novidades *::before,#novidades *::after{animation:none!important;transition:none!important}.news-card:hover{transform:none}}
 
 .news-voice{display:flex;align-items:center;justify-content:center;gap:10px;background:radial-gradient(ellipse at center,rgba(44,200,216,.18),transparent 75%)}.news-voice span{color:var(--accent);font-size:28px;font-weight:800}.news-voice i{width:9px;height:55px;border-radius:8px;background:var(--accent);animation:voice-wave 1s ease-in-out infinite alternate}.news-voice i:nth-child(3){animation-delay:-.3s}.news-voice i:nth-child(4){animation-delay:-.6s}.news-voice i:nth-child(5){animation-delay:-.2s}.news-voice i:nth-child(6){animation-delay:-.8s}@keyframes voice-wave{to{transform:scaleY(.25);opacity:.5}}
+/* Keyframes card: a word travels and grows between gold diamonds while a playhead crosses the track. */
+.news-keys{background:radial-gradient(120% 100% at 50% 0%,rgba(255,200,60,.12),transparent 60%),var(--bg-2)}
+.news-keys .keys-text{position:absolute;left:12%;top:28%;font:900 30px Montserrat,sans-serif;color:#fff;text-shadow:0 4px 16px rgba(0,0,0,.6);animation:keys-move 4s cubic-bezier(.45,0,.55,1) infinite}
+.news-keys .keys-track{position:absolute;left:8%;right:8%;bottom:30px;height:26px;border-radius:8px;background:rgba(196,129,58,.85)}
+.news-keys .keys-track i{position:absolute;top:50%;width:12px;height:12px;margin:-6px 0 0 -6px;background:#ffc83c;transform:rotate(45deg);box-shadow:0 0 0 1px rgba(0,0,0,.5)}
+.news-keys .keys-track i:nth-child(1){left:8%}.news-keys .keys-track i:nth-child(2){left:50%}.news-keys .keys-track i:nth-child(3){left:92%}
+.news-keys .keys-track b{position:absolute;top:-10px;bottom:-10px;left:8%;width:2px;background:#fff;box-shadow:0 0 10px rgba(255,255,255,.8);animation:keys-head 4s linear infinite}
+@keyframes keys-head{0%{left:8%}100%{left:92%}}
+@keyframes keys-move{0%{transform:translate(0,0) scale(.8) rotate(0);opacity:.35}50%{transform:translate(110px,-14px) scale(1.25) rotate(-8deg);opacity:1}100%{transform:translate(220px,6px) scale(.95) rotate(0);opacity:.85}}
