@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://chibangar.github.io/corte-site/sitemap.xml
