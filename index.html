@@ -18,14 +18,16 @@
 <link rel="stylesheet" href="feedback.css">
 <link rel="stylesheet" href="countries.css?v=3">
 <link rel="stylesheet" href="feedback-notice.css">
+<link rel="stylesheet" href="capcut.css?v=2">
 <script src="countries.js?v=3" defer></script>
 <script src="feedback-notice.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
 <script src="site.js?v=1" defer></script>
 </head>
-<body>
+<body class="cc">
 <a class="skip" href="#instalar" data-i18n="nav.skip">Ir para o download</a>
+<div class="promo"><a href="#novidades"><b data-i18n="bar.new">Novo na 0.1.26:</b> <span data-i18n="bar.text">estabilizar vídeo, curvas de velocidade e vozes →</span></a></div>
 <header id="top">
   <div class="wrap bar">
     <nav aria-label="Secções">
@@ -37,7 +39,7 @@
       <a href="#feedback">Feedback</a>
     </nav>
     <a class="logo" href="#">
-      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M9 6 L26 16 L9 26 Z" fill="none" stroke="#fff" stroke-width="3" stroke-linejoin="round"/><path d="M6 26 L26 6" stroke="#2cc8d8" stroke-width="2.6" stroke-linecap="round"/></svg>
+      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M9 6 L26 16 L9 26 Z" fill="none" stroke="#0b0c0f" stroke-width="3" stroke-linejoin="round"/><path d="M6 26 L26 6" stroke="#2cc8d8" stroke-width="2.6" stroke-linecap="round"/></svg>
       Corte
     </a>
     <div class="bar-end">
@@ -59,7 +61,7 @@
       <div class="floor"></div>
       <div class="device"><img src="img/editor.png" alt="O editor do Corte: biblioteca, pré-visualização com legendas e linha do tempo" width="1600" height="900" fetchpriority="high"></div>
       <div class="copy bl">
-        <h1 class="fx" data-i18n="hero.title">Feito para cortar tudo.</h1>
+        <h1 class="fx" data-i18n-html="hero.title">Feito para <span class="hl">cortar tudo</span>.</h1>
         <p data-i18n="hero.text">Editor de vídeo grátis para Windows: legendas automáticas, transições, stickers, sons de cinema e agentes de IA. Sem marcas de água, sem conta.</p>
         <div class="cta">
           <a class="btn dl" href="https://github.com/chibangar/corte-site/releases/latest/download/Corte-Setup.exe">
@@ -426,7 +428,8 @@
     "foot.copy": "© 2026 Corte. All rights reserved.",
     "foot.credits": "Uses <a href=\"https://ffmpeg.org\">FFmpeg</a>, <a href=\"https://github.com/ggml-org/whisper.cpp\">whisper.cpp</a> and fonts from <a href=\"https://fonts.google.com\">Google Fonts</a>.",
     "nav.skip": "Skip to the download", "nav.captions": "Captions", "nav.sound": "Sound", "nav.ai": "AI", "nav.download": "Download",
-    "hero.title": "Built to cut everything.",
+    "hero.title": "Built to <span class=\"hl\">cut everything</span>.",
+    "bar.new": "New in 0.1.26:", "bar.text": "video stabilisation, speed curves and voices →",
     "hero.text": "A free video editor for Windows: automatic captions, transitions, stickers, cinematic sounds and AI agents. No watermarks, no account.",
     "hero.download": "Download free", "hero.news": "See what's new →", "hero.free": "free",
     "cap.unit": "templates", "cap.label": "ready-made text templates, with 16 fonts and word-by-word animations.",

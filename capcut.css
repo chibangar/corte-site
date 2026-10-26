@@ -1,0 +1,189 @@
+/* Corte website, light "editor product page" look: white page, soft pastel cards,
+   cyan accent, black pill buttons, big friendly headlines. Loaded after the other
+   stylesheets; everything is scoped to body.cc so the old dark look is one class
+   away. The pinned cinematic scroll is off in this look (site.js checks body.cc):
+   every chapter is a normal card in the page flow. */
+body.cc {
+  --bg: #ffffff;
+  --bg-2: #f5f7fa;
+  --panel: #ffffff;
+  --panel-2: #eef1f5;
+  --line: #e3e7ee;
+  --text: #0b0c0f;
+  --dim: #5d6573;
+  --accent: #0097aa;
+  --cyan: #19e5f2;
+  --gold: #a87400;
+  --pink: #d9267f;
+  --orange: #19e5f2;
+  --radius: 22px;
+  --ink: #0b0c0f;
+  background: var(--bg);
+  color: var(--text);
+}
+body.cc a { color: var(--accent); }
+body.cc ::selection { background: var(--cyan); color: #04181b; }
+
+/* ---------- announcement bar ---------- */
+.promo { background: var(--cyan); color: #04181b; text-align: center; font-size: 13.5px; font-weight: 600; padding: 9px 16px; }
+.promo a { color: inherit; text-decoration: none; }
+.promo a:hover { text-decoration: underline; }
+.promo b { font-weight: 800; }
+
+/* ---------- header ---------- */
+body.cc header { position: sticky; top: 0; background: rgba(255, 255, 255, .86); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
+body.cc header.scrolled { background: rgba(255, 255, 255, .94); border-color: var(--line); }
+body.cc .bar { height: 64px; grid-template-columns: auto 1fr auto; gap: 28px; }
+body.cc .bar .logo { order: -1; font-size: 20px; font-weight: 800; letter-spacing: -.03em; }
+body.cc .bar nav { gap: 22px; }
+body.cc .bar nav a { color: var(--text); font-size: 14px; font-weight: 500; opacity: .75; }
+body.cc .bar nav a:hover { opacity: 1; color: var(--text); }
+body.cc .lang { border-color: var(--line); }
+body.cc .lang button { color: var(--dim); }
+body.cc .lang button[aria-pressed="true"] { background: var(--panel-2); color: var(--text); }
+body.cc .pill { background: var(--ink) !important; color: #fff !important; font-size: 14px; padding: 10px 18px; font-weight: 700; }
+body.cc .pill:hover { transform: none; background: #25272d !important; }
+
+/* ---------- type and buttons ---------- */
+body.cc h1, body.cc h2, body.cc h3 { color: var(--text); }
+body.cc .fx { text-shadow: none; }
+body.cc h2 { font-weight: 800; font-size: clamp(30px, 4.2vw, 56px); line-height: 1.04; letter-spacing: -.035em; }
+body.cc .hl { color: var(--cyan); }
+body.cc .eyebrow { color: var(--accent); font-size: 12.5px; }
+body.cc .btn { background: var(--cyan); color: #04181b; box-shadow: none; font-weight: 700; font-size: 16px; padding: 15px 28px; }
+body.cc .btn:hover { transform: translateY(-1px); box-shadow: 0 8px 28px rgba(25, 229, 242, .45); }
+body.cc .btn.ghost { background: var(--panel-2); color: var(--text); padding: 15px 28px; font-weight: 600; }
+body.cc .btn.ghost:hover { background: #e3e8ef; color: var(--text); box-shadow: none; }
+
+/* ---------- chapters become cards ---------- */
+body.cc .chapter { padding: 14px 0; }
+body.cc .stage {
+  height: auto; min-height: 0; overflow: hidden; position: relative;
+  width: min(1208px, calc(100% - 32px)); margin: 0 auto; padding: clamp(28px, 5vw, 64px);
+  border-radius: 32px; background: rgba(var(--glow), .09);
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); column-gap: clamp(24px, 4vw, 56px); row-gap: 0; align-content: center; align-items: center; justify-items: stretch;
+}
+body.cc .ambient, body.cc .floor, body.cc .giant, body.cc .callouts { display: none; }
+body.cc .copy, body.cc .meta, body.cc .sound-chips { position: static !important; inset: auto !important; max-width: none; width: auto; padding: 0; margin: 0; text-align: left !important; grid-column: 1; translate: none !important; }
+body.cc .copy p { color: var(--dim); max-width: 460px; font-size: 16px; margin: 0 0 22px; }
+body.cc .copy p.num-label { margin: 6px 0 20px; }
+body.cc .copy h1, body.cc .copy h2 { margin: 0 0 14px; }
+body.cc .chapter:not(#hero) .copy h2 { font-size: clamp(30px, 4.2vw, 56px); }
+body.cc .num, body.cc .copy .num { font-size: clamp(54px, 7vw, 96px); line-height: .95; letter-spacing: -.05em; margin: 0 0 6px; color: var(--text); }
+body.cc .num small { font-size: 16px; color: var(--dim); }
+body.cc .cta { justify-content: flex-start !important; margin-top: 4px; }
+
+/* the visual of each chapter sits in the second column */
+body.cc .device, body.cc #hero .device, body.cc #legendas .device, body.cc #transicoes .device,
+body.cc .agent, body.cc .sticker-stage, body.cc .wave {
+  grid-column: 2; grid-row: 1 / span 8; width: 100% !important; max-width: none; translate: none !important; transform: none !important; margin: 0;
+}
+body.cc .device { border-radius: 20px; border: 1px solid rgba(11, 12, 15, .08); box-shadow: 0 24px 60px -24px rgba(11, 12, 15, .35); background: #0b0c0f; }
+body.cc .device img, body.cc .device video { border-radius: 20px; }
+body.cc #transicoes .stage, body.cc #stickers .stage { grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); }
+body.cc #transicoes .device, body.cc #stickers .sticker-stage { grid-column: 1; }
+body.cc #transicoes .copy, body.cc #stickers .copy { grid-column: 2; }
+
+/* hero: centred headline, then the editor */
+body.cc #hero .stage {
+  display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0;
+  background: radial-gradient(60% 55% at 20% 0%, rgba(150, 120, 255, .22), transparent 70%), radial-gradient(60% 55% at 85% 10%, rgba(25, 229, 242, .28), transparent 70%), #f4f6ff;
+  padding-top: clamp(40px, 7vw, 88px);
+}
+body.cc #hero .copy { text-align: center !important; display: flex; flex-direction: column; align-items: center; }
+body.cc #hero .copy h1 { font: 800 clamp(38px, 6.2vw, 84px)/1.02 var(--display); letter-spacing: -.035em; margin: 0 0 18px; max-width: 14ch; }
+body.cc #hero .copy p { max-width: 560px; font-size: clamp(16px, 1.5vw, 19px); }
+body.cc #hero .cta { justify-content: center !important; }
+body.cc #hero .meta { text-align: center !important; margin: 18px 0 8px; font-size: 13px; line-height: 1.8; }
+body.cc #hero .device { grid-column: auto; grid-row: auto; width: min(100%, 980px) !important; margin-top: 28px; }
+body.cc #hero .copy, body.cc #hero .meta { grid-column: auto; }
+body.cc #hero .copy { order: 1; } body.cc #hero .meta { order: 2; } body.cc #hero .device { order: 3; }
+.beta-tag { color: var(--gold); border-color: rgba(168, 116, 0, .35); }
+
+/* sound: the waveform */
+body.cc .wave { height: 300px; gap: 3px; justify-content: center; overflow: hidden; z-index: auto; }
+body.cc .wave i { width: clamp(3px, .45vw, 6px); background: linear-gradient(180deg, #7fdcff, var(--cyan)); box-shadow: none; }
+body.cc .sound-chips { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-start; margin-top: 18px; }
+body.cc .sound-chips span { color: var(--text); background: #fff; border: 1px solid var(--line); backdrop-filter: none; }
+
+/* stickers */
+body.cc .sticker-stage { aspect-ratio: 1.25; position: relative; }
+body.cc .sticker-stage img { filter: drop-shadow(0 18px 22px rgba(11, 12, 15, .18)); }
+body.cc .swatch { color: var(--text); }
+body.cc .swatch[aria-pressed="true"] { border-color: var(--text); }
+body.cc .swatch em { color: var(--dim); }
+
+/* the AI agent's chat */
+body.cc .chat { background: #fff; border-color: var(--line); box-shadow: 0 24px 60px -24px rgba(11, 12, 15, .3); backdrop-filter: none; }
+body.cc .chat .ask { background: var(--panel-2); }
+body.cc .chat .tool { background: var(--bg-2); color: var(--dim); }
+body.cc .chat .tool b { color: var(--text); }
+body.cc .chat .tool::before { background: var(--cyan); box-shadow: none; }
+
+/* the closing band is the one dark card, like a call-to-action banner */
+body.cc #final .stage { background: #0b0c0f; color: #fff; --text: #fff; --dim: #a3aab6; --panel-2: #1b1d22; }
+body.cc #final .copy p, body.cc #final .num-label { color: #a3aab6; }
+body.cc #final .num { color: #fff; }
+body.cc #final .copy.bl { order: 1; } body.cc #final .copy.br { order: 2; } body.cc #final .copy.tl { order: 3; margin-top: 26px; }
+body.cc #final .copy h2 { color: #fff; font-size: clamp(36px, 5vw, 68px); }
+body.cc #final .device { background: #1b1d22; }
+body.cc #final .btn.ghost { background: #1b1d22; color: #fff; }
+
+/* ---------- everything included ---------- */
+body.cc #tudo { padding: 90px 0 60px; }
+body.cc .spec { background: #fff; border-color: var(--line); box-shadow: 0 12px 40px -26px rgba(11, 12, 15, .25); }
+body.cc .spec.hi { background: #e9fcfe; border-color: rgba(25, 229, 242, .55); }
+body.cc .spec dt { color: var(--dim); }
+
+/* ---------- install ---------- */
+body.cc #instalar { border-top: 0; background: var(--bg-2); }
+body.cc .steps li::before { background: #fff; border-color: var(--line); }
+body.cc .note-box { background: #fff; }
+body.cc .note-box.warn { background: #fff8e1; border-color: #f0d98a; }
+body.cc .rel-info { color: var(--dim) !important; }
+
+/* ---------- news ---------- */
+body.cc #novidades { background: var(--bg); }
+body.cc .news-card { background: #fff; box-shadow: 0 12px 40px -28px rgba(11, 12, 15, .3); }
+body.cc .news-card:hover { border-color: var(--cyan); }
+body.cc .news-visual { background: #eaf8fb; border-bottom-color: var(--line); }
+body.cc .news-gallery, body.cc .news-keys, body.cc .news-auto { background: #101114; }
+body.cc .news-logo, body.cc .news-community, body.cc .news-voice, body.cc .news-update { background: radial-gradient(ellipse at center, rgba(25, 229, 242, .28), #eaf8fb 80%); }
+body.cc .news-count { background: var(--cyan); color: #04181b; }
+body.cc .news-status { color: var(--gold); border-color: rgba(168, 116, 0, .3); background: rgba(255, 200, 60, .14); }
+body.cc .news-status.live { color: #00717f; border-color: rgba(0, 151, 170, .3); background: rgba(25, 229, 242, .16); }
+body.cc .news-bubble { color: var(--accent); box-shadow: 0 6px 16px -8px rgba(11, 12, 15, .3); }
+body.cc .news-body h3 { color: var(--text); }
+body.cc .update-callout { background: #e9fcfe; }
+
+/* ---------- countries, feedback, notice ---------- */
+body.cc #download-countries { background: var(--bg-2); padding: 80px 0; }
+body.cc #feedback { background: var(--bg); padding: 80px 0; }
+body.cc .country-panel, body.cc .feedback-panel { box-shadow: 0 12px 40px -28px rgba(11, 12, 15, .25); }
+body.cc #feedback input, body.cc #feedback select, body.cc #feedback textarea { background: var(--bg-2); }
+body.cc #feedback-notice { box-shadow: 0 18px 50px -12px rgba(11, 12, 15, .35); border-color: var(--cyan); }
+body.cc footer { background: var(--bg-2); border-top: 1px solid var(--line); }
+
+/* a gentle entrance for the hero, and anchors that clear the sticky header */
+@keyframes cc-rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+body.cc #hero .copy > *, body.cc #hero .meta { animation: cc-rise .7s cubic-bezier(.2, .7, .2, 1) both; }
+body.cc #hero .copy > :nth-child(2) { animation-delay: .08s; } body.cc #hero .copy > :nth-child(3) { animation-delay: .16s; } body.cc #hero .meta { animation-delay: .22s; }
+body.cc #hero .device { animation: cc-rise .9s .2s cubic-bezier(.2, .7, .2, 1) both; }
+body.cc section[id] { scroll-margin-top: 80px; }
+
+@media (max-width: 900px) {
+  .promo { font-size: 12.5px; }
+  body.cc .bar { grid-template-columns: auto 1fr; height: 58px; }
+  body.cc .bar nav { display: none; }
+  body.cc .stage { display: flex; flex-direction: column; align-items: stretch; gap: 18px; padding: 26px 20px 28px; border-radius: 26px; }
+  body.cc .stage > * { grid-column: auto !important; grid-row: auto !important; }
+  body.cc #transicoes .device, body.cc #stickers .sticker-stage { order: 2; }
+  body.cc .device, body.cc #hero .device, body.cc #legendas .device, body.cc #transicoes .device, body.cc .agent, body.cc .sticker-stage, body.cc .wave { width: 100% !important; }
+  body.cc .wave { height: 180px; }
+  body.cc #hero .stage { align-items: center; }
+  body.cc #hero .copy h1 { font-size: clamp(34px, 10vw, 52px); }
+  body.cc #final .copy.tl { margin-top: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.cc #hero .copy > *, body.cc #hero .meta, body.cc #hero .device { animation: none !important; }
+}

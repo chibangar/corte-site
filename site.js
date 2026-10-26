@@ -71,7 +71,7 @@
     })).observe(wave);
   }
 
-  if (!window.gsap || !window.ScrollTrigger || reduced) return;
+  if (!window.gsap || !window.ScrollTrigger || reduced || document.body.classList.contains("cc")) return;
   gsap.registerPlugin(ScrollTrigger);
 
   // Text that arrives out of a chromatic blur (and leaves into one).
