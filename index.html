@@ -22,6 +22,7 @@
 <meta name="keywords" content="editor de vídeo grátis, editor de vídeo sem marca de água, legendas automáticas, editor de vídeo para Windows, alternativa ao CapCut, free video editor">
 <link rel="canonical" href="https://chibangar.github.io/corte-site/">
 <meta name="theme-color" content="#ffffff">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"É mesmo grátis?","acceptedAnswer":{"@type":"Answer","text":"Sim. O Corte é grátis, sem marcas de água e sem criar conta. Ainda é uma versão beta, por isso podes encontrar falhas: conta-nos em Feedback."}},{"@type":"Question","name":"Em que sistemas funciona?","acceptedAnswer":{"@type":"Answer","text":"No Windows 10 e no Windows 11."}},{"@type":"Question","name":"Porque é que o Windows avisa ao instalar?","acceptedAnswer":{"@type":"Answer","text":"O instalador não tem um certificado de assinatura pago, por isso o Windows mostra «O Windows protegeu o PC». Carrega em «Mais informações» e «Executar mesmo assim». Se preferires, analisa o ficheiro no VirusTotal antes de o abrir."}},{"@type":"Question","name":"Os meus vídeos são enviados para algum servidor?","acceptedAnswer":{"@type":"Answer","text":"Não. A edição, as legendas automáticas, os filtros e a separação de voz correm no teu computador. A internet só é usada para instalar, atualizar e descarregar os modelos opcionais (legendas, vozes, melhoria de qualidade), uma vez cada."}},{"@type":"Question","name":"As legendas automáticas funcionam em músicas?","acceptedAnswer":{"@type":"Answer","text":"Sim. Com música alta, o Corte separa a voz da música e reconhece só a voz, por isso apanha também o canto. Nenhum motor acerta a 100 %: com música muito alta ou letra pouco clara podem faltar palavras, que podes corrigir à mão."}},{"@type":"Question","name":"Posso usar os efeitos sonoros em vídeos monetizados?","acceptedAnswer":{"@type":"Answer","text":"Sim. Os 47 efeitos sonoros foram criados pelo próprio Corte, sem direitos de autor. A música que importares continua a ser da tua responsabilidade."}},{"@type":"Question","name":"Tem alguma relação com o CapCut?","acceptedAnswer":{"@type":"Answer","text":"Não. O Corte é um editor independente, feito de raiz e sem qualquer ligação ao CapCut ou à ByteDance."}},{"@type":"Question","name":"Como reporto um erro ou peço uma função?","acceptedAnswer":{"@type":"Answer","text":"Na secção Feedback do site, ou dentro da app. Lemos tudo e as novidades aparecem aqui."}}]}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Corte","applicationCategory":"MultimediaApplication","operatingSystem":"Windows 10, Windows 11","description":"Editor de vídeo grátis para Windows com legendas automáticas, filtros, transições, stickers, efeitos sonoros sem direitos de autor e agentes de IA. Sem marcas de água e sem conta.","url":"https://chibangar.github.io/corte-site/","image":"https://chibangar.github.io/corte-site/img/share.png","downloadUrl":"https://github.com/chibangar/corte-site/releases/latest/download/Corte-Setup.exe","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"},"inLanguage":["pt","en"]}</script>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23121214'/%3E%3Cpath d='M10 8 L24 16 L10 24 Z' fill='none' stroke='white' stroke-width='2.6' stroke-linejoin='round'/%3E%3Cpath d='M7 25 L25 7' stroke='%232cc8d8' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,7 +33,7 @@
 <link rel="stylesheet" href="feedback.css">
 <link rel="stylesheet" href="countries.css?v=3">
 <link rel="stylesheet" href="feedback-notice.css">
-<link rel="stylesheet" href="capcut.css?v=2">
+<link rel="stylesheet" href="capcut.css?v=3">
 <script src="countries.js?v=3" defer></script>
 <script src="feedback-notice.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
@@ -50,6 +51,7 @@
       <a href="#stickers">Stickers</a>
       <a href="#ia" data-i18n="nav.ai">IA</a>
       <a href="#novidades" data-i18n="nav.news">Novidades</a>
+      <a href="#faq">FAQ</a>
       <a href="#feedback">Feedback</a>
     </nav>
     <a class="logo" href="#">
@@ -334,6 +336,22 @@
     </div>
   </section>
 </main>
+<section id="faq" aria-labelledby="faq-title">
+  <div class="wrap">
+    <div class="center"><span class="eyebrow" data-i18n="faq.eyebrow">Perguntas frequentes</span>
+    <h2 id="faq-title" data-i18n="faq.title">Antes de descarregares.</h2></div>
+    <div class="faq-list">
+      <details class="faq-item"><summary data-i18n="faq.q1">É mesmo grátis?</summary><p data-i18n="faq.a1">Sim. O Corte é grátis, sem marcas de água e sem criar conta. Ainda é uma versão beta, por isso podes encontrar falhas: conta-nos em Feedback.</p></details>
+      <details class="faq-item"><summary data-i18n="faq.q2">Em que sistemas funciona?</summary><p data-i18n="faq.a2">No Windows 10 e no Windows 11.</p></details>
+      <details class="faq-item"><summary data-i18n="faq.q3">Porque é que o Windows avisa ao instalar?</summary><p data-i18n="faq.a3">O instalador não tem um certificado de assinatura pago, por isso o Windows mostra «O Windows protegeu o PC». Carrega em «Mais informações» e «Executar mesmo assim». Se preferires, analisa o ficheiro no VirusTotal antes de o abrir.</p></details>
+      <details class="faq-item"><summary data-i18n="faq.q4">Os meus vídeos são enviados para algum servidor?</summary><p data-i18n="faq.a4">Não. A edição, as legendas automáticas, os filtros e a separação de voz correm no teu computador. A internet só é usada para instalar, atualizar e descarregar os modelos opcionais (legendas, vozes, melhoria de qualidade), uma vez cada.</p></details>
+      <details class="faq-item"><summary data-i18n="faq.q5">As legendas automáticas funcionam em músicas?</summary><p data-i18n="faq.a5">Sim. Com música alta, o Corte separa a voz da música e reconhece só a voz, por isso apanha também o canto. Nenhum motor acerta a 100 %: com música muito alta ou letra pouco clara podem faltar palavras, que podes corrigir à mão.</p></details>
+      <details class="faq-item"><summary data-i18n="faq.q6">Posso usar os efeitos sonoros em vídeos monetizados?</summary><p data-i18n="faq.a6">Sim. Os 47 efeitos sonoros foram criados pelo próprio Corte, sem direitos de autor. A música que importares continua a ser da tua responsabilidade.</p></details>
+      <details class="faq-item"><summary data-i18n="faq.q7">Tem alguma relação com o CapCut?</summary><p data-i18n="faq.a7">Não. O Corte é um editor independente, feito de raiz e sem qualquer ligação ao CapCut ou à ByteDance.</p></details>
+      <details class="faq-item"><summary data-i18n="faq.q8">Como reporto um erro ou peço uma função?</summary><p data-i18n="faq.a8">Na secção Feedback do site, ou dentro da app. Lemos tudo e as novidades aparecem aqui.</p></details>
+    </div>
+  </div>
+</section>
 
 <section id="download-countries" aria-labelledby="countries-heading">
   <div class="wrap center">
@@ -439,6 +457,7 @@
     "beta.text": "Corte is not fully finished yet: this is a beta and some features may have bugs or change. Keep copies of your important videos.",
     "beta.short": "beta version, still in development",
     "dl.people": "installer downloads", "dl.person": "installer download", "st.dl": "downloads",
+    "faq.eyebrow":"Frequently asked questions", "faq.title":"Before you download.", "faq.q1":"Is it really free?", "faq.a1":"Yes. Corte is free, with no watermarks and no account. It is still a beta, so you may find bugs: tell us in Feedback.", "faq.q2":"Which systems does it run on?", "faq.a2":"On Windows 10 and Windows 11.", "faq.q3":"Why does Windows warn me when installing?", "faq.a3":"The installer has no paid code-signing certificate, so Windows shows \"Windows protected your PC\". Click \"More info\" and then \"Run anyway\". If you prefer, scan the file on VirusTotal before opening it.", "faq.q4":"Are my videos uploaded anywhere?", "faq.a4":"No. Editing, automatic captions, filters and voice separation run on your computer. The internet is only used to install, update and download the optional models (captions, voices, upscaling), once each.", "faq.q5":"Do automatic captions work on songs?", "faq.a5":"Yes. With loud music, Corte separates the voice from the music and transcribes just the voice, so it catches singing too. No engine is 100% exact: with very loud music or unclear lyrics some words may be missed, and you can fix them by hand.", "faq.q6":"Can I use the sound effects in monetised videos?", "faq.a6":"Yes. The 47 sound effects were created by Corte itself, with no copyright. Any music you import remains your own responsibility.", "faq.q7":"Is it related to CapCut?", "faq.a7":"No. Corte is an independent editor built from scratch, with no connection to CapCut or ByteDance.", "faq.q8":"How do I report a bug or request a feature?", "faq.a8":"In the Feedback section of the website. We read everything and the news appears here.", 
     "foot.copy": "© 2026 Corte. All rights reserved.",
     "foot.credits": "Uses <a href=\"https://ffmpeg.org\">FFmpeg</a>, <a href=\"https://github.com/ggml-org/whisper.cpp\">whisper.cpp</a> and fonts from <a href=\"https://fonts.google.com\">Google Fonts</a>.",
     "nav.skip": "Skip to the download", "nav.captions": "Captions", "nav.sound": "Sound", "nav.ai": "AI", "nav.download": "Download",
