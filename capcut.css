@@ -198,3 +198,9 @@ body.cc #faq { padding: 90px 0 40px; background: var(--bg); }
 .faq-item summary::after { content: "+"; position: absolute; right: 2px; top: 50%; translate: 0 -50%; font-size: 24px; font-weight: 500; color: var(--accent); }
 .faq-item[open] summary::after { content: "–"; }
 .faq-item p { margin: 0 0 20px; color: var(--dim); font-size: 15.5px; line-height: 1.6; }
+
+/* ---------- downloads for the other systems ---------- */
+.os-links { font-size: 13px; color: var(--dim); margin-top: 6px; }
+.os-links a { color: var(--accent); text-decoration: none; font-weight: 600; }
+.os-links a:hover { text-decoration: underline; }
+.os-links a.here { color: var(--text); }
