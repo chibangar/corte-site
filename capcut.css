@@ -204,3 +204,13 @@ body.cc #faq { padding: 90px 0 40px; background: var(--bg); }
 .os-links a { color: var(--accent); text-decoration: none; font-weight: 600; }
 .os-links a:hover { text-decoration: underline; }
 .os-links a.here { color: var(--text); }
+
+/* ---------- narração em português de Portugal ---------- */
+#narrator { position: fixed; left: 20px; bottom: 20px; z-index: 39; display: flex; align-items: center; gap: 10px; max-width: calc(100vw - 40px); padding: 10px 16px 10px 12px; border: 1px solid var(--accent); border-radius: 999px; background: var(--panel); color: var(--text); font-family: inherit; font-weight: 600; font-size: 13px; line-height: 1.2; cursor: pointer; box-shadow: 0 10px 34px rgba(0, 0, 0, .4); }
+#narrator[hidden] { display: none; }
+#narrator:hover { filter: brightness(1.08); }
+#narrator:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+#narrator .ico { display: grid; place-items: center; flex: none; width: 28px; height: 28px; border-radius: 50%; background: var(--accent); color: #04282c; font-size: 12px; }
+#narrator .sub { display: block; font-weight: 500; font-size: 11px; opacity: .7; }
+#narrator .bar { position: absolute; left: 14px; right: 14px; bottom: 3px; height: 2px; border-radius: 2px; background: var(--accent); transform-origin: left; transform: scaleX(0); opacity: .8; }
+@media (max-width: 560px) { #narrator { left: 12px; bottom: 12px; } #narrator .txt { display: none; } #narrator { padding: 8px; } }
