@@ -437,7 +437,9 @@
   // The button downloads the right file for the visitor's system; the links under it cover the rest.
   const ua = navigator.userAgent || "";
   const OS = /Android|iPhone|iPad/i.test(ua) ? "win" : /Mac/i.test(navigator.platform || ua) ? "mac" : /Linux|X11/i.test(ua) ? "linux" : "win";
-  const BASE_OLD = "https://github.com/" + REPO + "/releases/download/v0.1.33/"; // macOS/Linux builds of 0.1.34 are pending\n  const dlOf = k => (k === "win" ? BASE : BASE_OLD) + FILES[k];\n  const DL = dlOf(OS);
+  const BASE_OLD = "https://github.com/" + REPO + "/releases/download/v0.1.33/"; // macOS/Linux builds of 0.1.34+ are pending
+  const dlOf = k => (k === "win" ? BASE : BASE_OLD) + FILES[k];
+  const DL = dlOf(OS);
   $$(".dl").forEach(a => { a.href = DL; });
   $$("[data-os]").forEach(a => { a.href = dlOf(a.dataset.os); });
   $$('[data-os="' + OS + '"]').forEach(a => a.classList.add("here"));
