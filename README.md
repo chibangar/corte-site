@@ -6,7 +6,7 @@ Website and downloads for **Corte**, a free video editor with no watermarks and 
 - 🌐 Site / Website: https://chibangar.github.io/corte-site/
 - 🪟 Microsoft Store: https://apps.microsoft.com/detail/9nw6vmp8ktlc
 - ⬇️ Descarregar / Download: [Corte-Setup.exe](https://github.com/chibangar/corte-site/releases/latest/download/Corte-Setup.exe) (Windows 10 e 11 / Windows 10 and 11)
-- Versão atual / Current version: **0.1.37** (Halloween: 8 stickers, 6 transições, 8 sons)
+- Versão atual / Current version: **0.1.38** (Halloween: 7 efeitos, 4 filtros e 7 modelos de texto, além dos stickers, transições e sons da 0.1.37)
 
 macOS (.dmg) e Linux (AppImage, .tar.gz): disponíveis na [release v0.1.33](https://github.com/chibangar/corte-site/releases/tag/v0.1.33).
 macOS (.dmg) and Linux (AppImage, .tar.gz): available in [release v0.1.33](https://github.com/chibangar/corte-site/releases/tag/v0.1.33).
